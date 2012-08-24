@@ -1,0 +1,66 @@
+/*
+-------- Basic Formatting --------
+*/
+	
+.normal {
+	font-weight: normal;
+}
+
+.tdr {
+	text-align: right;
+}
+
+.tdc {
+	text-align: center;
+}
+
+	
+/*
+-------- Loading Animation --------
+*/
+
+	
+.modal-loading {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 )
+                url('/img/loading.gif')
+                50% 50%
+                no-repeat;
+}
+
+body.loading {
+    overflow: hidden;   
+}
+
+body.loading .modal-loading {
+    display: block;
+}
+
+/*
+-------- Table Styles --------
+*/
+
+tr.selected {
+	background: #e74848 !important;
+}
+
+tr.selected td {
+	color: #fff !important;
+}
+
+
+#results_table tbody tr {
+	cursor: pointer;
+}
+
+
+#results_table tbody td:last-child {
+	text-align: right;
+	white-space: nowrap;
+}
