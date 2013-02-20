@@ -30,12 +30,29 @@ var dkbatch_data = new Array();
 var dkbatch_max = 0;
 var dkbatch_index = 0;
 
-function init_batch() {
+
+function init_convert_batch() {
 	dkbatch_data = [];
     dbkatch_index = 0;
     
 	$.ajax({
-       url: "/inbox/inboxcontent",
+       url: "/inbox/convert_content",
+       async: false,
+       success: function(msg) { 
+	       dkbatch_data = JSON.parse(msg);
+	       dkbatch_max = dkbatch_data.length;
+       }
+   });
+	
+}
+
+
+function init_import_batch() {
+	dkbatch_data = [];
+    dbkatch_index = 0;
+    
+	$.ajax({
+       url: "/inbox/inbox_content",
        async: false,
        success: function(msg) { 
 	       dkbatch_data = JSON.parse(msg);
@@ -84,7 +101,7 @@ $(document).ready(function() {
 		bootbox.confirm("Do you really want to import all files?", function(result){
 			if(result) {
 				$('#info_box').hide();
-				init_batch();
+				init_import_batch();
 				$("#results_status").html("");
 			    if (dkbatch_data.length > 0 ) {
 			    	do_batch("/inbox/import", 'Import');
@@ -96,6 +113,24 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	$("button.convert").bind('click', function(e) {
+		bootbox.confirm("Do you really want to convert all files?", function(result){
+			if(result) {
+				$('#info_box').hide();
+				init_convert_batch();
+				$("#results_status").html("");
+			    if (dkbatch_data.length > 0 ) {
+			    	do_batch("/inbox/convert", 'Convert');
+			    } else {
+			    	$("#results_status").html('<p><span class="label label-warning">NOTE</span> Nothing to convert<p>');
+			    };
+			} else {
+				return;
+			}
+		});
+	});
+
 
 });
 </script>
@@ -137,7 +172,7 @@ $(document).ready(function() {
 					<hr />
 					<p><button class="btn btn-max import">Import files</button></p>
 					<hr />
-					<p><button class="btn btn-max">Convert mp4->mp3</button></p>
+					<p><button class="btn btn-max convert">Convert mp4->mp3</button></p>
 					<p><a class="btn btn-danger btn-max">Empty trash</a></p>
 
 				</div>

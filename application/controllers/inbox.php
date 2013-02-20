@@ -9,12 +9,34 @@ class Inbox_Controller extends Base_Controller {
 		return View::make('inbox.index')->with('inbox_count', $inbox_count);
 	}
 
-	public function get_inboxcontent() {
-		$filelist = dkHelpers::get_directory_content(dkmusic_inbox);
+	public function get_convert_content() {
+		$filelist = dkHelpers::get_directory_content(dkmusic_internal_convert);
 		return json_encode($filelist);
 	}
 
-	
+	public function get_convert() {
+		if (Request::ajax()) {
+			$file = Input::get('file');
+			$filename = substr($file, 0, -4);
+			
+			$input_file = dkmusic_internal_convert . $filename . ".m4a";
+			$output_file = dkmusic_internal_convert . $filename . ".mp3";
+
+			$convert_data = exec ('./bin/ffmpeg -i "' . $input_file . '" -acodec mp3 -ac 2 -ab 320 "' . $output_file . '"');
+			
+			unlink ($input_file);
+			dkHelpers::move_file( $output_file, dkmusic_inbox . $filename . ".mp3" );
+			
+			echo '<p><span class="label label-success">CONVERTED</span> ' . $filename . '</p>';
+
+		}
+
+	}
+
+	public function get_inbox_content() {
+		$filelist = dkHelpers::get_directory_content(dkmusic_inbox);
+		return json_encode($filelist);
+	}
 	
 	public function get_import() {
 	
@@ -84,7 +106,7 @@ class Inbox_Controller extends Base_Controller {
 					$TagData['TXXX'][2]['data']  = $song['metadata']['acoustid_score'];
 								
 					$tagwriter->tag_data = $TagData;
-					
+										
 					if ($tagwriter->WriteID3v2()) {
 						
 						$hash = hash('sha256', $song['metadata']['acoustid_acoustid'] . $song['metadata']['acoustid_fingerprint']);
@@ -96,7 +118,10 @@ class Inbox_Controller extends Base_Controller {
 							
 							$new_song = Librarysong::find($new_librarysong_id);
 
-							$new_filename = $song['artist'] . ' - ' . $song['title'] . '.mp3';
+							$new_artist = dkHelpers::remove_bad_characters($song['artist']);
+							$new_title = dkHelpers::remove_bad_characters($song['title']);
+
+							$new_filename = $new_artist . ' - ' . $new_title . '.mp3';
 							$new_filename = dkHelpers::move_file( $fullpath, dkmusic_library . dkHelpers::get_folder_prefix($new_filename) . DS . $new_filename );
 							
 							$new_song->filename = $new_filename;
@@ -113,7 +138,7 @@ class Inbox_Controller extends Base_Controller {
 						}
 		
 					} else {
-						echo '<p><span class="label label-warning">WARNING</span> Failed to write file</p>';
+						echo '<p><span class="label label-warning">WARNING</span> Failed to write TAG data to file</p>';
 					}
 					
 					

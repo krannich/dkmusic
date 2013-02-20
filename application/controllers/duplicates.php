@@ -85,6 +85,7 @@ class Duplicates_Controller extends Base_Controller {
 		
 	}
 
+	/*
 	public function get_dupfingerprints() {
 		
 		if (Request::ajax()) {
@@ -114,6 +115,59 @@ class Duplicates_Controller extends Base_Controller {
 		} 
 		
 	}
+	*/
+	
+	public function get_dup_fingerprints() {
+		
+		if (Request::ajax()) {
+		
+			$songs = DB::query('
+				SELECT
+					library.id,
+					library.folder,
+					library.filename,
+					library.artist,
+					library.title,
+					library_metadata.bitrate,
+					library_metadata.length,
+					library_metadata.size,
+					library_metadata.library_id,
+					library_metadata.acoustid_fingerprint
+				FROM library_metadata
+				INNER JOIN (
+				    SELECT acoustid_fingerprint
+				    FROM library_metadata
+				    GROUP BY acoustid_fingerprint
+				    HAVING count(acoustid_fingerprint) > 1
+				) dup ON library_metadata.acoustid_fingerprint = dup.acoustid_fingerprint
+				LEFT JOIN library ON library_metadata.library_id=library.id
+				ORDER BY library_metadata.acoustid_fingerprint;
+			');
+
+			$results = array();
+			
+			foreach ($songs as $song) {
+			
+				$html_file_link = addslashes($song->folder.DS.rawurlencode($song->filename));		
+
+				$results[] = array(
+					'id'=>$song->id,
+					'filename'=>$song->filename,
+					'artist'=>$song->artist,
+					'title'=>$song->title,
+					'size'=>dkHelpers::format_size($song->size),
+					'playbutton'=>'<a href="'. $html_file_link .'"><img src="img/but_play.png" title="' . $song->folder . '/' . $song->filename. '"/></a>',
+					'bitrate'=>$song->bitrate,
+					'length'=>$song->length,
+				);
+			}
+
+			return json_encode($results);
+		
+		} 
+				
+	}
+
 
 
 	public function get_showfiles_acoustid() {

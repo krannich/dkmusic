@@ -159,14 +159,17 @@ function get_dupacoustids() {
 
 
 function get_dupfingerprints() {
+
+	/*
 	create_results_table(['Fingerprint' , 'Sum'],[[1,1]]);
 
 	$('#results_table').tabledata( {
-		"source"		: "/duplicates/dupfingerprints",
+		"source"		: "/duplicates/dup_fingerprints",
 		"output"		: "fingerprint_output,duplicates",
 		"dk_data"		: "fingerprint",
 		"dk_options"	: {}
 	});
+	
 	
 	$('#results_table').bind('update', function() {
 		$("#results_table tbody tr").bind("dblclick", function() {
@@ -174,6 +177,62 @@ function get_dupfingerprints() {
 			show_files('fingerprint', dk_data.fingerprint);
 	    });
 	});
+	*/
+	
+	dkbatch_data = [];
+
+	create_results_table(['', 'Artist', 'Title', 'kbit/s', 'Length', 'Size']);
+		
+	$('#results_table').before('<div id="results_status" class="well" style="height: 50px;overflow: auto;"></div>');
+	
+	$('#results_table').tabledata( {
+		"source"		: "/duplicates/dup_fingerprints",
+		"output"		: "playbutton,artist,title,bitrate,length,size",
+		"dk_data"		: "id,filename",
+		"dk_options"	: {}
+	});
+	
+	$('#results_table').bind('update', function() {
+		$("#results_table tbody tr").unbind("dblclick");
+		
+		$("#results_table tbody tr").bind("click", function() {
+			var dk_data = eval('([' + $(this).attr('dk_data') + '])')[0];
+			$(this).toggleClass('selected');	
+			if ($.inArray(dk_data.id, dkbatch_data)>=0) {
+				dkbatch_data.splice( $.inArray(dk_data.id,dkbatch_data) , 1 );				
+			} else {
+				dkbatch_data.push(dk_data.id);
+			}
+		});
+				
+	});
+	
+	$('#results_table').before('<p><button class="btn btn-danger btn-max" onclick="delete_songs();">Delete selected songs</button></p>');	
+	$('#results_table').after('<p>&nbsp;</p><p><button class="btn btn-danger btn-max" onclick="delete_songs();">Delete selected songs</button></p>');	
+
+	$('#results_table').bind('update', function() {
+		$('#results_table tbody a').bind('click', function(e){
+			e.preventDefault();
+		    var song = ($(this).attr('href'));
+			$('.isPlaying').html('<img src="img/but_play.png" />');
+			if (isplaying==0 || songplaying!=song) {
+				playsong(song);
+				isplaying =1;
+				songplaying = song;
+				($(this).html('<img src="img/but_stop.png" />'));
+				($(this).addClass('isPlaying'));
+			} else {
+				$("#jquery_jplayer_1").jPlayer("stop");
+				isplaying=0;
+				songplaying = '';
+				($(this).html('<img src="img/but_play.png" />'));
+			}
+		return false;
+		});
+	});
+
+
+
 	
 }
 

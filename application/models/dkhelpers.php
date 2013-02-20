@@ -63,6 +63,7 @@ class dkHelpers {
 			'ü' => 'ue',
 			
 			'ß' => 'ss',
+			'$' => 's',
 			
 			'_' => ' ',
 			
@@ -74,7 +75,9 @@ class dkHelpers {
 			"]" => ")",
 			"?" => "",
 			"!" => "",
-			
+			'/' => "-",
+			'\\' => "-",
+
 			"featuring" => "ft",
 			" feat. " => " ft ",
 			" feat " => " ft ",
@@ -138,7 +141,12 @@ class dkHelpers {
 		return strtr( $string, $replace_characters );
 	}
 
-
+	public static function remove_bad_characters($string) {
+		$replace_characters = array(
+			"/" => "-",
+		);
+		return strtr( $string, $replace_characters );
+	}
 
 
 	/*

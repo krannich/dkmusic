@@ -333,7 +333,7 @@ abstract class Model {
 	 * @param  string        $table
 	 * @param  string        $foreign
 	 * @param  string        $other
-	 * @return Relationship
+	 * @return Has_Many_And_Belongs_To
 	 */
 	public function has_many_and_belongs_to($model, $table = null, $foreign = null, $other = null)
 	{
@@ -445,11 +445,22 @@ abstract class Model {
 	 *
 	 * @return void
 	 */
-	protected function timestamp()
+	public function timestamp()
 	{
 		$this->updated_at = new \DateTime;
 
 		if ( ! $this->exists) $this->created_at = $this->updated_at;
+	}
+
+	/**
+	 *Updates the timestamp on the model and immediately saves it.
+	 *
+	 * @return void
+	 */
+	public function touch()
+	{
+		$this->timestamp();
+		$this->save();
 	}
 
 	/**
@@ -518,7 +529,7 @@ abstract class Model {
 
 		foreach ($this->attributes as $key => $value)
 		{
-			if ( ! isset($this->original[$key]) or $value !== $this->original[$key])
+			if ( ! array_key_exists($key, $this->original) or $value != $this->original[$key])
 			{
 				$dirty[$key] = $value;
 			}
@@ -534,7 +545,7 @@ abstract class Model {
 	 */
 	public function get_key()
 	{
-		return $this->get_attribute(static::$key);
+		return array_get($this->attributes, static::$key);
 	}
 
 	/**
@@ -617,6 +628,8 @@ abstract class Model {
 			// to_array method, keying them both by name and ID.
 			elseif (is_array($models))
 			{
+				$attributes[$name] = array();
+
 				foreach ($models as $id => $model)
 				{
 					$attributes[$name][$id] = $model->to_array();
@@ -709,7 +722,7 @@ abstract class Model {
 		{
 			if (array_key_exists($key, $this->$source)) return true;
 		}
-		
+
 		if (method_exists($this, $key)) return true;
 	}
 
