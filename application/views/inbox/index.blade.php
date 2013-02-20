@@ -97,6 +97,9 @@ function do_batch(url, title) {
 
 
 $(document).ready(function() {
+
+	// Assign button actions
+
 	$("button.import").bind('click', function(e) {
 		bootbox.confirm("Do you really want to import all files?", function(result){
 			if(result) {
@@ -125,6 +128,17 @@ $(document).ready(function() {
 			    } else {
 			    	$("#results_status").html('<p><span class="label label-warning">NOTE</span> Nothing to convert<p>');
 			    };
+			} else {
+				return;
+			}
+		});
+	});
+
+
+	$("button.emptytrash").bind('click', function(e) {
+		bootbox.confirm("Do you really want to empty the trash?", function(result){
+			if(result) {
+				location.href = "/inbox/emptytrash";
 			} else {
 				return;
 			}
@@ -170,10 +184,10 @@ $(document).ready(function() {
 						</tr>
 					</table>
 					<hr />
-					<p><button class="btn btn-max import">Import files</button></p>
+					<p><button class="btn btn-max import"><i class="icon-refresh"></i> Import files</button></p>
 					<hr />
-					<p><button class="btn btn-max convert">Convert mp4->mp3</button></p>
-					<p><a class="btn btn-danger btn-max">Empty trash</a></p>
+					<p><button class="btn btn-max convert"><i class="icon-music"></i> Convert to mp3</button></p>
+					<p><button class="btn btn-danger btn-max emptytrash"><i class="icon-trash"></i> Empty trash</button></p>
 
 				</div>
 			</div>

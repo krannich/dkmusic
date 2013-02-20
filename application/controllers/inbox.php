@@ -13,6 +13,11 @@ class Inbox_Controller extends Base_Controller {
 		$filelist = dkHelpers::get_directory_content(dkmusic_internal_convert);
 		return json_encode($filelist);
 	}
+	
+	public function get_emptytrash() {
+		self::_recursiveDelete(dkmusic_trash);
+		return Redirect::to('/inbox')->with('success', 'Trash successfully deleted!');
+	}
 
 	public function get_convert() {
 		if (Request::ajax()) {
@@ -169,5 +174,21 @@ class Inbox_Controller extends Base_Controller {
 	    return $result;
 
 	}
+	
+	private function _recursiveDelete($str){
+	    if(is_file($str)){
+	        return @unlink($str);
+	    }
+	    elseif(is_dir($str)){
+	        $scan = glob(rtrim($str,'/').'/*');
+	        foreach($scan as $index=>$path){
+	            self::_recursiveDelete($path);
+	        }
+	        // return @rmdir($str);
+	        return true;
+	    }
+	}
+
+	
 
 }
