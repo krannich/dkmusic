@@ -25,6 +25,5 @@ dkmusic uses/requires the following third-party libraries:
 - Mustache.js licensed under the MIT License.
 - Twitter Bootstrap licensed under Apache License Version 2.0
 - Font Awesome licensed under the SIL Open Font License.
-
-- FFMPEG licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later. 
+- FFMPEG licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
 - FPCalc licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
