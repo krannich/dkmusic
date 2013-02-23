@@ -54,12 +54,16 @@ To all the beta testers! Without you it wouldn't be possible to develop great so
 dkmusic is open-sourced software licensed under the MIT License.
 
 dkmusic uses/requires the following third-party libraries:
-- Laravel licensed under the MIT License.
-- jQuery licensed under the MIT License.
-- Underscore.js licensed under the MIT License.
-- Backbone licensed under the MIT License.
-- Mustache.js licensed under the MIT License.
-- Twitter Bootstrap licensed under Apache License Version 2.0.
-- Font Awesome licensed under the SIL Open Font License.
-- FFMPEG licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
-- FPCalc licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
+- Laravel is licensed under the MIT License.
+- getID3() is licensed under the "GNU Public License" (GPL).
+
+- jQuery is licensed under the MIT License.
+- Underscore.js is licensed under the MIT License.
+- Backbone is licensed under the MIT License.
+- Mustache.js is licensed under the MIT License.
+- Twitter Bootstrap is licensed under Apache License Version 2.0.
+- Font Awesome is licensed under the SIL Open Font License.
+- jPlayer is licensed under the MIT License.
+
+- FFMPEG is licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
+- FPCalc is licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
