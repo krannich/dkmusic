@@ -5,6 +5,7 @@ dkmusic is the ultimate mp3 music library manager built on the PHP framework Lar
 
 ## How does it work?
 
+### Import
 Your music files will be organized in the corresponding folders (#, A-Z) of your music library.
 Duplicates will be removed according to their acoustid and audio fingerprint.
 For more information about acoustid and audio fingerprints visit www.acoustid.org.
