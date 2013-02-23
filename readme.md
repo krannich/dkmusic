@@ -24,7 +24,7 @@ For more information about acoustid and audio fingerprints visit www.acoustid.or
 - Howard carpendale - Nachts wenn alles schlaeft.mp3
 - Black eyed peas - Dont stop the party.mp3
 
-Note Since the external library getID3 does not support to ID3-tag writing of m4a files,
+**Note:** Since the external library getID3 does not support to ID3-tag writing of m4a files,
 all your m4a files must to be converted to mp3.
 
 
