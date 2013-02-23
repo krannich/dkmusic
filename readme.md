@@ -11,15 +11,17 @@ Contributions are encouraged and welcome; however, please review the Developer C
 git commit -s -m "this commit will be signed off automatically!"
 ```
 
-## License
+## Licenses
 
 [dkmusic] is open-sourced software licensed under GPL.
 
-[dkmusic] uses/requires the following third-party libraries
-
+[dkmusic] uses/requires the following third-party libraries:
 - FFMPEG licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later. 
 - FPCalc licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
 - Laravel licensed under the MIT License.
 - Font Awesome licensed under the SIL Open Font License.
 - Twitter Bootstrap licensed under Apache License Version 2.0
 - jQuery licensed under the MIT License.
+- Backbone licensed under the MIT License.
+- Mustache.js licensed under the MIT License.
+- Underscore.js licensed under the MIT License.
