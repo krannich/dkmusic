@@ -3,6 +3,30 @@
 dkmusic is the ultimate mp3 music library manager built on the PHP framework Laravel. It is intended to organize your music collection by preventing duplicates.
 
 
+## How does it work?
+
+Your music files will be organized in the corresponding folders (#, A-Z) of your music library.
+Duplicates will be removed according to their acoustid and audio fingerprint.
+For more information about acoustid and audio fingerprints visit www.acoustid.org.
+
+**The following steps are performed:**
+- Remove punctuation marks, apostrophes, curly and square brackets from artist and title
+- Remove "The" and "Die" from beginning of artist
+- Replace german umlauts, accents, and special characters.
+- Convert "featuring" and "feat" to "ft"
+- Convert artist and title to lowercase except first letter
+- Rename filename accordingly (a timestamp is added if filename already exists)
+
+**Afterwards your music files will look like this:**
+- Phil collins - In the air tonight (radio edit).mp3
+- Flo rida ft akon - Who dat girl (mds dont know who she is remix).mp3
+- Howard carpendale - Nachts wenn alles schlaeft.mp3
+- Black eyed peas - Dont stop the party.mp3
+
+Note Since the external library getID3 does not support to ID3-tag writing of m4a files,
+all your m4a files must to be converted to mp3.
+
+
 ## Contributing to dkmusic
 
 Contributions are encouraged and welcome!
