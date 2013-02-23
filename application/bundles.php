@@ -34,9 +34,9 @@
 */
 
 return array(
-
 	'docs' 				=> array('handles' => 'docs'),
 	'form-base-model' 	=> array('auto' => true),
 	'getid3'		 	=> array('auto' => true),
-
 );
+
+
