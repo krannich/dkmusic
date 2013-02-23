@@ -32,7 +32,52 @@
       <section>
         <h1>dkmusic :: the ultimate mp3 music library manager.</h1>
 
-<p>dkmusic is the ultimate mp3 music library manager built on the PHP framework Laravel. It is intended to organize your music collection by preventing duplicates.</p>
+<p><strong>dkmusic</strong> is the ultimate mp3 music library manager built on the PHP framework Laravel. It is intended to organize your mp3 music collection by preventing duplicates.</p>
+
+<h2>How does it work?</h2>
+
+<h3>Import</h3>
+
+<p>Simply put your music files into the inbox folder.
+<strong>dkmusic</strong> will analyze your files and move non-mp3 files into an internal folder for later conversion.
+If an mp3 files does not have a proper ID3Tag V2.3 (at least title and artist are required), it will moved it into a separate folder. </p>
+
+<p>Your music files will be organized in the corresponding folders (#, A-Z) of your music library (sorted by first letter of artist).
+Duplicates will be removed according to their acoustid and audio fingerprint.
+For more information about acoustid and audio fingerprints visit <a href="http://www.acoustid.org">www.acoustid.org</a>.</p>
+
+<p><strong>The following steps are performed:</strong></p>
+
+<ul>
+<li>Remove punctuation marks, apostrophes, curly and square brackets from artist and title</li>
+<li>Remove "The" and "Die" from beginning of artist</li>
+<li>Replace german umlauts, accents, and special characters.</li>
+<li>Convert "featuring" and "feat" to "ft"</li>
+<li>Convert artist and title to lowercase except first letter</li>
+<li>Rename filename accordingly (a timestamp is added if filename already exists)</li>
+</ul><p><strong>Afterwards your music files will look like this:</strong></p>
+
+<ul>
+<li>Phil collins - In the air tonight (radio edit).mp3</li>
+<li>Flo rida ft akon - Who dat girl (mds dont know who she is remix).mp3</li>
+<li>Howard carpendale - Nachts wenn alles schlaeft.mp3</li>
+<li>Black eyed peas - Dont stop the party.mp3</li>
+</ul><p><strong>Note:</strong> Since the external library getID3 does not support ID3-tag writing of m4a files,
+all your m4a files must to be converted to mp3.</p>
+
+<h2>Requirements</h2>
+
+<p>In order to use dkmusic you need to have the following server environment:</p>
+
+<ul>
+<li>PHP 5.4 or later</li>
+<li>MySQL Database 5.1 or later</li>
+</ul><p>Either store your Music in the public folder called Music or make a symbolic link to the location of your music library.
+The folder structure <strong>must be</strong> # and folders from A to Z.</p>
+
+<p><strong>Note:</strong> <strong>dkmusic</strong> works best in a local server environment on your desktop computer, since the database requires a lot of ressources, especially if your music library is very big (&gt;100.000 files).</p>
+
+<p><strong>Note:</strong> Since <strong>dkmusic</strong> is still in development, some features are not implemented yet.</p>
 
 <h2>Contributing to dkmusic</h2>
 
@@ -44,20 +89,33 @@
 
 <h2>Licenses</h2>
 
-<p>dkmusic is open-sourced software licensed under the MIT License.</p>
+<p><strong>dkmusic</strong> is open-sourced software licensed under the MIT License.</p>
 
-<p>dkmusic uses/requires the following third-party libraries:</p>
+<p><strong>dkmusic</strong> uses the following third-party components:</p>
 
 <ul>
-<li>Laravel licensed under the MIT License.</li>
-<li>jQuery licensed under the MIT License.</li>
-<li>Underscore.js licensed under the MIT License.</li>
-<li>Backbone licensed under the MIT License.</li>
-<li>Mustache.js licensed under the MIT License.</li>
-<li>Twitter Bootstrap licensed under Apache License Version 2.0</li>
-<li><p>Font Awesome licensed under the SIL Open Font License.</p></li>
-<li><p>FFMPEG licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later. </p></li>
-<li><p>FPCalc licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.</p></li>
+<li>
+<strong>Laravel</strong>, licensed under the MIT License.</li>
+<li>
+<strong>getID3()</strong>, licensed under the "GNU Public License" (GPL).</li>
+<li>
+<strong>jQuery</strong>, licensed under the MIT License.</li>
+<li>
+<strong>Underscore.js</strong>, licensed under the MIT License.</li>
+<li>
+<strong>Backbone</strong>, licensed under the MIT License.</li>
+<li>
+<strong>Mustache.js</strong>, licensed under the MIT License.</li>
+<li>
+<strong>Twitter Bootstrap</strong>, licensed under Apache License Version 2.0.</li>
+<li>
+<strong>Font Awesome</strong>, licensed under the SIL Open Font License.</li>
+<li>
+<strong>jPlayer</strong>, licensed under the MIT License.</li>
+<li>
+<strong>FFMPEG</strong>, licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.</li>
+<li>
+<strong>FPCalc</strong>, licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.</li>
 </ul>
       </section>
       <footer>
