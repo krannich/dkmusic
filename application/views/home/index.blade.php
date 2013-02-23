@@ -140,7 +140,7 @@ $(document).ready(function () {
 							<td class="tdr">{{dkFolder::count_files_in(dkmusic_inbox)}}</td>
 						</tr>
 						<tr>
-							<td>Convert m4a->mp3:</td>
+							<td>Convert to mp3:</td>
 							<td class="tdr">{{dkFolder::count_files_in(dkmusic_internal_convert)}}</td>
 						</tr>
 						<tr>

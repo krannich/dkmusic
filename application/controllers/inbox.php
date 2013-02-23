@@ -43,9 +43,24 @@ class Inbox_Controller extends Base_Controller {
 		return json_encode($filelist);
 	}
 	
-	public function get_import() {
-	
+	public function get_info() {
 		if (Request::ajax()) {
+			$info = array(
+				"inbox_count" 			=> dkFolder::count_files_in(dkmusic_inbox),
+				"convert_count" 		=> dkFolder::count_files_in(dkmusic_internal_convert),
+				"missingdata_count" 	=> dkFolder::count_files_in(dkmusic_internal_missingdata),
+				"duplicates_count" 		=> dkFolder::count_files_in(dkmusic_output_duplicates),
+				"trash_count" 			=> dkFolder::count_files_in(dkmusic_trash),
+			); 
+			return Response::json($info); 
+		}
+	}
+	
+	public function get_import() {
+
+		if (Request::ajax()) {
+			$response = array();
+
 			$file = Input::get('file');
 				
 		    $getid3 = new getID3;	
@@ -67,8 +82,11 @@ class Inbox_Controller extends Base_Controller {
 	
 			if ($song['type'] == "m4a") {
 				dkHelpers::move_file( $fullpath, dkmusic_internal_convert . $song['filename'] );
-				echo '<p><span class="label label-warning">Must be converted</span> ' . $song['filename'] . '</p>';
-	
+				$response = array (
+					'code' => 2,
+					'text' => '<p><span class="label label-warning">Must be converted</span> ' . $song['filename'] . '</p>'
+				);
+					
 			} else if ($song['type'] == "mp3") {
 				$fileinfo = $getid3->analyze($fullpath);
 											
@@ -133,29 +151,47 @@ class Inbox_Controller extends Base_Controller {
 							$new_song->folder = dkHelpers::get_folder_prefix($new_filename);
 							$new_song->save();
 							
-							echo '<p><span class="label label-success">IMPORTED</span> ' . $new_filename .'</p>';
+							$response = array (
+								'code' => 1,
+								'text' => '<p><span class="label label-success">IMPORTED</span> ' . $new_filename .'</p>'
+							);
 							
 						} else {
-							
 							dkHelpers::move_file( $fullpath, dkmusic_output_duplicates . $song['filename'] );
-							echo '<p><span class="label label-important">DUPLICATE</span> ' . $song['filename'] . '</p>';
+							$response = array (
+								'code' => 4,
+								'text' => '<p><span class="label label-important">DUPLICATE</span> ' . $song['filename'] . '</p>'
+							);
 							
 						}
 		
 					} else {
-						echo '<p><span class="label label-warning">WARNING</span> Failed to write TAG data to file</p>';
-					}
 					
+						$response = array (
+							'code' => 99,
+							'text' => '<p><span class="label label-warning">WARNING</span> Failed to write TAG data to file</p>'
+						);
+					}
 					
 				} else {
 					dkHelpers::move_file( $fullpath, dkmusic_internal_missingdata . $song['filename'] );
-					echo '<p><span class="label label-warning">Missing data</span> ' .$song['filename'] . '</p>';
+					$response = array (
+						'code' => 3,
+						'text' => '<p><span class="label label-warning">Missing data</span> ' .$song['filename'] . '</p>'
+					);
 					
 				}
+				
 			} else {
 				dkHelpers::move_file( $fullpath, dkmusic_trash . $song['filename'] );
-				echo '<p><span class="label label-important">Moved to trash</span> ' . $song['filename'] . '</p>';
+				$response = array (
+					'code' => 10,
+					'text' => '<p><span class="label label-important">Moved to trash</span> ' . $song['filename'] . '</p>'
+				);
+				
 			}
+			
+			echo json_encode($response);
 
 		}
 	}

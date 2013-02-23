@@ -71,9 +71,14 @@ function do_batch(url, title) {
        url: url,
        data: {"file" : file},
        async: true,
-       success: function(msg) { 
-       
-            $("#results_status").prepend(msg);
+       success: function(response) { 
+       	    var json = JSON.parse(response);
+       		if(json.code==1) inboxinfo.imported();
+       		if(json.code==2) inboxinfo.increase('convert_count');
+       		if(json.code==3) inboxinfo.increase('missingdata_count');
+       		if(json.code==4) inboxinfo.increase('duplicates_count');
+       		if(json.code==10) inboxinfo.increase('trash_count');
+            $("#results_status").prepend(json.text);
             $("#results_progress .bar").css("width", ((dkbatch_index+1) * 100 / dkbatch_max) + "%");
           	
           	if (dkbatch_data.length <= 0 ) {
@@ -145,6 +150,9 @@ $(document).ready(function() {
 		});
 	});
 
+    inboxinfo = new dkMusic.Models.InboxInfo();
+	var inboxinfoview = new dkMusic.Views.InboxInfoView({model: inboxinfo});
+    inboxinfo.fetch();
 
 });
 </script>
@@ -158,32 +166,12 @@ $(document).ready(function() {
 		<div class="row-fluid">
 		
 			<div class="sidebar-nav left">
-				<div class="well">	
-					<h2 class="normal">Inbox</h2>	
+				
+				<div class="well">
+					<div id="inboxinfoview"></div>
+
 					<hr />
-					<table style="width: 100%">
-						<tr>
-							<td>New files</td>
-							<td class="tdr">{{dkFolder::count_files_in(dkmusic_inbox)}}</td>
-						</tr>
-						<tr>
-							<td>Convert m4a->mp3:</td>
-							<td class="tdr">{{dkFolder::count_files_in(dkmusic_internal_convert)}}</td>
-						</tr>
-						<tr>
-							<td>Missing data:</td>
-							<td class="tdr">{{dkFolder::count_files_in(dkmusic_internal_missingdata)}}</td>
-						</tr>
-						<tr>
-							<td>Duplicates:</td>
-							<td class="tdr">{{dkFolder::count_files_in(dkmusic_output_duplicates)}}</td>
-						</tr>
-						<tr>
-							<td>Trash:</td>
-							<td class="tdr">{{dkFolder::count_files_in(dkmusic_trash)}}</td>
-						</tr>
-					</table>
-					<hr />
+					
 					<p><button class="btn btn-max import"><i class="icon-refresh"></i> Import files</button></p>
 					<hr />
 					<p><button class="btn btn-max convert"><i class="icon-music"></i> Convert to mp3</button></p>

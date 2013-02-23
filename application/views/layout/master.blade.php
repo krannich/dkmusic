@@ -16,9 +16,14 @@
     {{ HTML::style('/css/dk.tablemenu.css') }}
     {{ HTML::style('/css/dk.tablesorter.css') }}
 
-    
     {{ HTML::script('/js/jquery.min.js') }}
     {{ HTML::script('/js/bootstrap.min.js') }}
+    {{ HTML::script('/js/underscore.min.js') }}
+    {{ HTML::script('/js/backbone.min.js') }}
+    {{ HTML::script('/js/mustache.min.js') }}
+    {{ HTML::script('/js/mustache.templates.js') }}
+
+
     {{ HTML::script('/js/bootbox.min.js') }}
     {{ HTML::script('/js/jquery.pnotify.min.js') }}
     {{ HTML::script('/js/jquery.jqmq.min.js') }}
@@ -26,6 +31,10 @@
 	{{ HTML::script('/js/dk.tablemenu.min.js') }}
 	{{ HTML::script('/js/dk.tabledata.min.js') }}
 	{{ HTML::script('/js/dk.tablesorter.min.js') }}
+
+    {{ HTML::script('/app/init.js') }}
+    {{ HTML::script('/app/models.js') }}
+    {{ HTML::script('/app/views.js') }}
     
     <style type="text/css">
 

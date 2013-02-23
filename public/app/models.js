@@ -1,16 +1,29 @@
 dkMusic.Models.InboxInfo = Backbone.Model.extend({
 	defaults : {
-		inbox_count 		: 0,
-		convert_count 		: 0,
-		missingdata_count 	: 0,
-		duplicates_count 	: 0,
-		trash_count 		: 0,
+		inbox_count 		: null,
+		convert_count 		: null,
+		missingdata_count 	: null,
+		duplicates_count 	: null,
+		trash_count 		: null,
 	},
 	
-	urlRoot : '/info.php',
+	urlRoot : '/inbox/info',
 	
-	initialize: function() {
-		this.fetch();
+	increase : function(attribute) {
+		var inbox_count = this.get('inbox_count');
+		var attribute_count = this.get(attribute);
+		attribute_count ++;
+		inbox_count --;
+		this.set('inbox_count', inbox_count);
+		this.set(attribute, attribute_count);
+
+	},
+	
+	imported : function() {
+		var inbox_count = this.get('inbox_count');
+		inbox_count --;
+		this.set('inbox_count', inbox_count);
 	}
+		
 });
 
