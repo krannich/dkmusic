@@ -4,7 +4,7 @@ dkmusic is the ultimate mp3 music library manager built on the PHP framework Lar
 ## How does it work?
 
 ### Import
-Simple put your music files into the inbox folder.
+Simply put your music files into the inbox folder.
 dkmusic will analyze your files and move non-mp3 files into an internal folder for later conversion.
 If an mp3 files does not have a proper ID3Tag V2.3 (at least title and artist are required), it will moved it into a separate folder. 
 
@@ -36,9 +36,9 @@ In order to use dkmusic you need to have the following server environment:
 - MySQL Database 5.1 or later
 
 Either store your Music in the public folder called Music or make a symbolic link to the location of your music library.
-The folder structure **must be** #, A-Z
+The folder structure **must be** # and folders from A to Z.
 
-**Note:** dkmusic works best in a local server environment on your desktop computer, since the database requires a lot of ressources if your music library is very big (>100.000 files).
+**Note:** dkmusic works best in a local server environment on your desktop computer, since the database requires a lot of ressources, especially if your music library is very big (>100.000 files).
 
 **Note:** Since dkmusic is still in development, some features are not implemented yet.
 
