@@ -53,7 +53,7 @@ To all the beta testers! Without you it wouldn't be possible to develop great so
 ## Licenses
 dkmusic is open-sourced software licensed under the MIT License.
 
-dkmusic uses/requires the following third-party libraries:
+dkmusic uses the following third-party components:
 - Laravel is licensed under the MIT License.
 - getID3() is licensed under the "GNU Public License" (GPL).
 - jQuery is licensed under the MIT License.
