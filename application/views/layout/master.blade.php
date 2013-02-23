@@ -17,6 +17,7 @@
     {{ HTML::style('/css/dk.tablesorter.css') }}
 
     {{ HTML::script('/js/jquery.min.js') }}
+    {{ HTML::script('/js/jquery.mb.browser.min.js') }}
     {{ HTML::script('/js/bootstrap.min.js') }}
     {{ HTML::script('/js/underscore.min.js') }}
     {{ HTML::script('/js/backbone.min.js') }}

@@ -25,7 +25,6 @@ Route::get('test', function() {
 	// Paul Kalkbrenner - Schnakeln: 95867
 	// Peter Alexander - Weiße Weihnacht: 97009
 
-	
 	$song = DB::table('library')->where('id', '=' , '97009')->first();
 	var_dump ($song);
 	
