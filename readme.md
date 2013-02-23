@@ -1,7 +1,5 @@
 # dkmusic :: the ultimate mp3 music library manager.
-
-dkmusic is the ultimate mp3 music library manager built on the PHP framework Laravel. It is intended to organize your music collection by preventing duplicates.
-
+dkmusic is the ultimate mp3 music library manager built on the PHP framework Laravel. It is intended to organize your mp3 music collection by preventing duplicates.
 
 ## How does it work?
 
@@ -29,17 +27,14 @@ all your m4a files must to be converted to mp3.
 
 
 ## Contributing to dkmusic
-
 Contributions are encouraged and welcome!
 
 
 ## Thanks
-
 To all the beta testers! Without you it wouldn't be possible to develop great software like this.
 
 
 ## Licenses
-
 dkmusic is open-sourced software licensed under the MIT License.
 
 dkmusic uses/requires the following third-party libraries:
