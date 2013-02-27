@@ -46,12 +46,10 @@ The folder structure **must be** # and folders from A to Z.
 ## Installation
 1. Copy folder content to your Webserver (local server is recommended).
 2. In the public folder either create a symbolic link called Music that points to your music library (recommended) or just create a folder called Music in which your music files will be stored.
-3. Open database.php in folder application/config and adjust to your needs.
-4. Open routes.php and adjust the folders to your needs.
-5. Create a database called dkmusic
-6. Start your console and type:
-php artisan migrate:install to install migration table
-php artisan migrate to install dkmusic tables
+3. Open **database.php** located in folder **application/config** and adjust to your needs.
+4. Open **routes.php** and adjust the folders/settings to your needs.
+5. Create a database called **dkmusic**
+6. Open your console and type: <code>php artisan migrate:install</code> to install migration table and <code>php artisan migrate</code> to install dkmusic tables
 
 That's it! Have fun.
 
