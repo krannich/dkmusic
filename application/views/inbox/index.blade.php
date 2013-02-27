@@ -172,7 +172,7 @@ $(document).ready(function() {
 
 					<hr />
 					
-					<p><button class="btn btn-max import"><i class="icon-refresh"></i> Import files</button></p>
+					<p><button class="btn btn-max import"><i class="icon-cloud-upload"></i> Import files</button></p>
 					<hr />
 					<p><button class="btn btn-max convert"><i class="icon-music"></i> Convert to mp3</button></p>
 					<p><button class="btn btn-danger btn-max emptytrash"><i class="icon-trash"></i> Empty trash</button></p>

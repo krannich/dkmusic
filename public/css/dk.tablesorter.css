@@ -1,12 +1,12 @@
 table.tablesorter {
 	width: 100%;
-	//width:920px;
-	border: 0;
-	border-collapse:collapse;
+	border-collapse: collapse;
 }
 
-table.tablesorter > thead > tr {
-      border: 1px solid #bfbfbf;
+table.tablesorter > thead > tr,
+table.tablesorter > tbody > tr
+{
+	border: 1px solid rgb(221, 221, 221);
 }
 
 table.tablesorter > thead > tr > th {
@@ -16,12 +16,18 @@ table.tablesorter > thead > tr > th {
 	height: 35px;
     cursor: pointer; 
     font-weight: bold; 
-    color: #08C;
-    background: #F0F0F0;
-	background-image: -webkit-linear-gradient(top, #fff 0%, rgb(228, 231, 231) 100%);
-	background-image: -moz-linear-gradient(top, #fff 0%, rgb(228, 231, 231) 100%);
-	background-image: linear-gradient(top, #fff 0%, rgb(228, 231, 231) 100%);
-} 
+    color: #777;
+	background: #fafafa;
+	background: -moz-linear-gradient(#fafafa, #eaeaea);
+	background: -webkit-linear-gradient(#fafafa, #eaeaea);
+	background: linear-gradient(#fafafa, #eaeaea);
+	border-right: 1px solid rgb(221, 221, 221);
+	white-space: nowrap;
+}
+
+table.tablesorter > thead > tr > th:last-child {
+	border-right: none;
+}
 
 
 table.tablesorter tbody > tr > td {
@@ -30,53 +36,64 @@ table.tablesorter tbody > tr > td {
 }
 
 table.tablesorter > tbody > tr > td {
-	border: 1px solid #BFBFBF;
+	border: 1px solid rgb(221, 221, 221);
+}
+
+table.tablesorter > tbody > tr > td:last-child {
+	border-right: none;
+}
+
+
+table.tablesorter > tbody > tr.even > td {
+	background-color: rgb(255, 255, 255);
 }	
 
-table.tablesorter > tbody > tr.even {
-	background-color:  #f3f3f3;
+table.tablesorter > tbody > tr.odd > td {
+	background-color:  rgb(249, 249, 249);
 }	
 
-table.tablesorter > tbody > tr.odd {
-	background-color:  #fff;
-}	
-
-table.tablesorter > tbody > tr.highlight {
-  background: rgba(210,226,241, 0.5);
+table.tablesorter > tbody > tr.highlight > td {
+	background: rgba(210,226,241, 0.5);
 }
 
 table.tablesorter > thead > tr > th.tablesorter-headerSortUp { 
-    background: #08C;
-    color: #fff;
+    color: #08C;
+    background: #fafbfd;
+    background: -moz-linear-gradient(#fafbfd, rgb(210,226,241));
+    background: -webkit-linear-gradient(#fafbfd, rgb(210,226,241));
+    background: linear-gradient(#fafbfd, rgb(210,226,241));
 } 
 
 table.tablesorter > thead > tr > th.tablesorter-headerSortDown { 
-    background: #08C; 
-    color: #fff;
+    color: #08C;
+    background: #fafbfd;
+    background: -moz-linear-gradient(#fafbfd, rgb(210,226,241));
+    background: -webkit-linear-gradient(#fafbfd, rgb(210,226,241));
+    background: linear-gradient(#fafbfd, rgb(210,226,241));
 } 
 
-table.tablesorter > thead > tr > th > div:before		{
+table.tablesorter > thead > tr > th.tablesorter-header > div:before {
 	font-family: "FontAwesome";
 	content: "\f0dc";
 	margin-right: 10px;
 }
 
 table.tablesorter > thead > tr > th.tablesorter-headerSortUp > div:before { 
-  font-family: "FontAwesome";
-  content: "\f0de";
+	font-family: "FontAwesome";
+	content: "\f0de";
 }
 
 table.tablesorter > thead > tr > th.tablesorter-headerSortDown > div:before { 
-  font-family: "FontAwesome";
-  content: "\f0dd";
+	font-family: "FontAwesome";
+	content: "\f0dd";
 }
 
 table.tablesorter > thead > tr.tablesorter-stickyHeader  {
-		-moz-box-shadow: 0 5px 5px -2px rgba(64, 67, 72, 0.6);
-		-webkit-box-shadow: 0 5px 5px -2px rgba(64, 67, 72, 0.6);
-		box-shadow: 0 5px 5px -2px rgba(64, 67, 72, 0.6);
-		border-bottom: 0;
-		border-top: 0;
+	-moz-box-shadow: 0 6px 6px -3px rgba(64, 67, 72, 0.3);
+	-webkit-box-shadow: 0 6px 6px -3px rgba(64, 67, 72, 0.3);
+	box-shadow: 0 6px 6px -3px rgba(64, 67, 72, 0.3);
+	border-bottom: 0;
+	border-top: 0;
 }
 
 

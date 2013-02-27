@@ -106,6 +106,7 @@ Route::filter('before', function()
 	define ('dkmusic_trash', 				'/Volumes/Music/dkmusic/Trash/');
 
 	define ('AcoustID_API_KEY', 			'K8NONPbK');
+	define ('LastFM_API_KEY', 				'17fbdfdb9b688e6ad40f26bde31d6d37');
 
 	// Do stuff before every request to your application...
 });

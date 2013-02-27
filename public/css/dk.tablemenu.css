@@ -23,8 +23,8 @@ Work: http://krannich.de
 #tablemenu_context_menu {
 	position: absolute;
 	display: none;
-	overflow: hidden;
-	border: 1px solid  #aaa;
+	border: 1px solid rgb(221, 221, 221);
+	background: #fefefe;
 	background-image: -webkit-linear-gradient(top, #fefefe, #d0d0d0);
 	background-image: -moz-linear-gradient(top, #fefefe, #d0d0d0);
 	background-image: linear-gradient(top, #fefefe, #d0d0d0);
