@@ -73,6 +73,7 @@ To all the beta testers! Without you it wouldn't be possible to develop great so
 - **Backbone**, licensed under the MIT License.
 - **Mustache.js**, licensed under the MIT License.
 - **Twitter Bootstrap**, licensed under Apache License Version 2.0.
+- **Bootstrap Datepicker.js**, licensed under Apache License Version 2.0.
 - **Font Awesome**, licensed under the SIL Open Font License.
 - **jPlayer**, licensed under the MIT License.
 - **FFMPEG**, licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.

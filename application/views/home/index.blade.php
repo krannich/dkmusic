@@ -4,8 +4,10 @@
 
 {{HTML::script('/js/jquery.jplayer.min.js')}}
 {{HTML::script('/js/dk.jplayer.min.js')}}
+{{HTML::script('/js/bootstrap-datepicker.js')}}
 
 <link href="/css/skin/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
+{{HTML::style('/css/datepicker.css')}}
 
 <style>
 #results td:first-child {
@@ -43,6 +45,17 @@ var songs_menu = {
 
 $(document).ready(function () {
 
+	$('input,select').keypress(function(event) { return event.keyCode != 13; });
+	$('.datepicker').datepicker( {
+		
+		format	:	"yyyy-mm-dd",
+		autoclose: true,
+   		todayHighlight: true,
+   		language: 'de',
+   		weekStart: 1,
+   		todayBtn: true,
+	});
+	
 	$('#results').tabledata( {
 		"source"		: "/home/search",
 		"output"		: "playbutton,artist,title,bitrate,length,size",
@@ -98,21 +111,22 @@ $(document).ready(function () {
 		    
 		});
 	});
+	
+	
+	$('.affix').affix();
 
 });
 </script>
-
 
 @endsection
 
 @section('content')
 
-
 	 <div class="container-fluid">
 		<div class="row-fluid">
 		
-			<div class="sidebar-nav left">
-				<div class="well">		
+			<div class="sidebar-nav left" data-spy="affix" >
+				<div class="well affix">		
 					<h2 class="normal">Music library</h2>
 					<table style="width: 100%">
 						<tr>
@@ -124,7 +138,7 @@ $(document).ready(function () {
 							<td class="tdr">{{Librarysong::count_all_with_acoustid()}}</td>
 						</tr>
 						<tr>
-							<td>with AcoustFingerprint:</td>
+							<td>with Fingerprint:</td>
 							<td class="tdr">{{Librarysong::count_all_with_acoustid_fingerprint()}}</td>
 						</tr>					
 						<tr>
@@ -214,6 +228,9 @@ $(document).ready(function () {
 							<fieldset>
 
 								{{ Form::text('searchstring' , '', array('placeholder' => 'Search', 'autocomplete' => 'off')); }}
+								
+								{{ Form::text('searchdate' , '', array('placeholder' => 'Date', 'autocomplete' => 'off', 'class' => 'datepicker')); }}
+
 								<span class="help-inline">phil: search songs that begin with "phil" (case is ignored).<br />
 									*phil: search songs that contain "phil" (case is ignored).</span>
 							</fieldset>
