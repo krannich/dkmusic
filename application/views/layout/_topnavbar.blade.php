@@ -8,6 +8,9 @@
 
                 <li class="divider-vertical"></li>
 
+                <li{{@((strpos(URL::current(),'library') 		!==false  ) ? ' class="active"' : '' );}}><a href="/library">Library</a></li>
+
+
                 <li{{@((strpos(URL::current(),'inbox') 		!==false  ) ? ' class="active"' : '' );}}><a href="/inbox">Inbox</a></li>
 
                 <li{{@((strpos(URL::current(),'modifier') 	!==false  ) ? ' class="active"' : '' );}}><a href="/modifier">Modifier</a></li>
@@ -22,11 +25,11 @@
                 
                 <li{{@((strpos(URL::current(),'database') 	!==false  ) ? ' class="active"' : '' );}}><a href="/database">Database</a></li>
 
-                <li{{@((strpos(URL::current(),'settings') 	!==false  ) ? ' class="active"' : '' );}}><a href="/settings">Settings</a></li>
-
                 <li class="divider-vertical"></li>
 
-                <li{{@((strpos(URL::current(),'help') 		!==false  ) ? ' class="active"' : '' );}}><a href="/help">Help</a></li>
+                <li{{@((strpos(URL::current(),'settings') 	!==false  ) ? ' class="active"' : '' );}}><a href="/settings"><i class="icon-cog"></i></a></li>
+
+                <li{{@((strpos(URL::current(),'help') 		!==false  ) ? ' class="active"' : '' );}}><a href="/help"><i class="icon-question-sign"></i></a></li>
                 
             </ul>
             </div>

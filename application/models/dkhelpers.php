@@ -68,6 +68,7 @@ class dkHelpers {
 			'_' => ' ',
 			
 			"'" => '',
+			'"' => '',
 			"´" => '',
 			"`" => "",
 			
@@ -124,10 +125,6 @@ class dkHelpers {
 		$string = trim($string);
 		return ucfirst($string);
 	}
-	
-	
-		
-	
 	
 	public static function well_formed_fullpath($string) {
 		$replace_characters = array(

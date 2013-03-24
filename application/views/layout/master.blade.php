@@ -36,6 +36,7 @@
 
     {{ HTML::script('/app/init.js') }}    
     {{ HTML::script('/app/models.js') }}
+    {{ HTML::script('/app/collections.js') }}
     {{ HTML::script('/app/views.js') }}
 
     <?php

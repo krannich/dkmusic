@@ -27,3 +27,16 @@ dkMusic.Models.InboxInfo = Backbone.Model.extend({
 		
 });
 
+
+dkMusic.Models.SongModel = Backbone.Model.extend({
+	
+	urlRoot: '/library/edit',
+	
+	idAttribute: 'id',
+	id: '',
+	artist: '',
+	title: '',
+	genre: '',
+	year: '',
+	
+});

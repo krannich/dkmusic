@@ -2,6 +2,7 @@
 
 Route::controller(array(
 	'home',
+	'library',
 	
 	'inbox',
 	'modifier',

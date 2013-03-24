@@ -46,12 +46,13 @@ body.loading .modal-loading {
 -------- Table Styles --------
 */
 
-tr.selected {
+#results_table tbody tr.selected {
 	background: #e74848 !important;
 }
 
-tr.selected td {
+#results_table tbody tr.selected td {
 	color: #fff !important;
+	background: transparent !important;
 }
 
 
