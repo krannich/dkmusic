@@ -1,12 +1,12 @@
 <?php
 
-class Duplicates2_Controller extends Base_Controller {
+class Duplicates_Controller extends Base_Controller {
 
 	public $restful = true;
 
 	public function get_index() {
 	
-		return View::make('duplicates2.index');
+		return View::make('duplicates.index');
 		
 	}
 	

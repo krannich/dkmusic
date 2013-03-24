@@ -6,15 +6,7 @@
 ?>
 @section('header')
 
-{{HTML::script('/js/underscore.min.js')}}
-{{HTML::script('/js/backbone.min.js')}}
-
-{{HTML::script('/js/jquery.jplayer.min.js')}}
-{{HTML::script('/js/dk.jplayer.min.js')}}
-
-{{HTML::style('/css/jplayer.css')}}
-
-<script type="text/javascript">
+<script>
 function select_all() {
 	$("#results_table > tbody > tr").addClass('selected');
     $('#results_table > tbody').find('tr').each(function(i, el) {
@@ -328,40 +320,27 @@ $(document).ready(function() {
 @section('content')
 
 	 <div class="container">
-	 
-	 <div class="row">
-			<div class="span12">
-				<div class="well" style="padding-bottom: 0;">
-					<div class="row-fluid">
-				
-						<div class="span9">
-							<h2 class="normal pull-left" style="margin-right: 75px;">Duplicates</h2>
+		<div class="row">
+		
+			<div class="span3">
+				<div class="well">	
+					<h2 class="normal">Duplicates</h2>	
 
-							<div>
-								<p><button class="btn getdupacoustids">Duplicate AcoustIDs</button></p>
-								<p><button class="btn getdupfingerprints">Duplicate Fingerprints</button></p>
-								<p><button class="btn getdupartisttitle">Duplicate Artist/Title</button></p>
-							</div>
-							
-						</div>
-						
-						<div class="span3">
-							@include('partials._jp-player')
-						</div>
-					
-					</div>					
+					<hr />
+					<p><button class="btn btn-max getdupacoustids">Duplicate AcoustIDs</button></p>
+					<p><button class="btn btn-max getdupfingerprints">Duplicate Fingerprints</button></p>
+					<p><button class="btn btn-max getdupartisttitle">Duplicate Artist/Title</button></p>
+
 				</div>
 			</div>
-		</div>
-
-	 
-	 
-	 
-		<div class="row">
-			<div class="span12">	        
+			
+			<div class="span9">	        
 				<div role="main" id="main">
+					
 					<div id="results" class="well">
+					
 						<p><span class="label label-warning">NOTE</span> You will only see the most recent 50 results in order of decreasing frequency.<br />Double-click on a result to see which songs are involved.</p>
+											
 					</div>
 				</div>
 			</div>

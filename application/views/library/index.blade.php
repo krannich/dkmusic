@@ -5,11 +5,8 @@
 {{HTML::script('/js/underscore.min.js')}}
 {{HTML::script('/js/backbone.min.js')}}
 
-{{HTML::script('/js/jquery.jplayer.min.js')}}
-{{HTML::script('/js/dk.jplayer.min.js')}}
 {{HTML::script('/js/bootstrap-datepicker.js')}}
 
-{{HTML::style('/css/jplayer.css')}}
 {{HTML::style('/css/datepicker.css')}}
 
 <style type="text/css">
@@ -323,7 +320,7 @@ $(document).ready(function () {
 						</div>
 						
 						<div class="span3">
-							@include('partials._jp-player')
+
 						</div>
 					
 					</div>					

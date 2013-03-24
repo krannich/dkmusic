@@ -34,6 +34,12 @@
 	{{ HTML::script('/js/dk.tabledata.min.js') }}
 	{{ HTML::script('/js/dk.tablesorter.min.js') }}
 
+
+	{{HTML::script('/js/jquery.jplayer.min.js')}}
+	{{HTML::script('/js/dk.jplayer.min.js')}}
+	{{HTML::style('/css/jplayer-nav.css')}}
+
+
     {{ HTML::script('/app/init.js') }}    
     {{ HTML::script('/app/models.js') }}
     {{ HTML::script('/app/collections.js') }}

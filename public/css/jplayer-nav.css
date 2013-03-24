@@ -1,0 +1,149 @@
+
+div.jp-audio {
+	font-size:1em;
+	font-family:Verdana, Arial, sans-serif;
+	line-height:1.6;
+	color: #666;
+	position:relative;
+}
+
+div.jp-audio {
+	width:150px;
+}
+
+div.jp-interface {
+	position: relative;
+	width:100%;
+}
+
+div.jp-audio div.jp-type-single div.jp-interface {
+	height:20px;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+/* @group CONTROLS */
+div.jp-interface ul.jp-controls {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	font-family: "FontAwesome";
+}
+
+div.jp-audio ul.jp-controls {
+	width: 100%;
+}
+
+
+div.jp-interface ul.jp-controls li {
+	display:inline;
+	float: left;
+}
+
+div.jp-interface ul.jp-controls a {
+	display:block;
+	overflow:hidden;
+	text-align: center;	
+	text-decoration: none;
+}
+
+a.jp-play,
+a.jp-pause {
+	width:20px;
+	height:20px;
+	line-height: 20px;
+	font-size: 13px;
+}
+
+a.jp-play {
+	color: #999;
+}
+
+
+a.jp-play:hover {
+	color: #fff;
+}
+
+a.jp-pause {
+	display: none;
+	color: #08c !important;
+}
+
+a.jp-pause:hover {}
+a.jp-stop, a.jp-previous, a.jp-next {}
+a.jp-stop {}
+a.jp-stop:hover {}
+a.jp-previous {}
+a.jp-previous:hover {}
+a.jp-next {}
+a.jp-next:hover {}
+
+/* @end */
+
+/* @group progress bar */
+div.jp-progress {
+	overflow:hidden;
+	background-color: #666;
+}
+
+div.jp-audio div.jp-progress {
+	position: absolute;
+	top:0px;
+	height:10px;
+	left:25px;
+	width:125px;
+}
+
+div.jp-seek-bar {
+	width:0px;
+	height:100%;
+	cursor: pointer;
+}
+
+div.jp-play-bar {
+	background: #08c;
+	width:0px;
+	height:100%;
+}
+
+div.jp-seeking-bg {
+	background: #999;
+}
+
+/* @end */
+
+
+/* @group current time and duration */
+div.jp-audio div.jp-time-holder {
+	position:absolute;
+	top:10px;
+	left:25px;
+	width:125px;
+}
+
+div.jp-current-time,
+div.jp-duration {
+	width:60px;
+	font-size:.64em;
+	font-style:oblique;
+	color: #999;
+}
+div.jp-current-time {
+	float: left;
+	display:inline;
+}
+div.jp-duration {
+	float: right;
+	display:inline;
+	text-align: right;
+}
+
+/* @end */
+
+div.jp-jplayer audio,
+div.jp-jplayer {
+	width:0px;
+	height:0px;
+}
+
