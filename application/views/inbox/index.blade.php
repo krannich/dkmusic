@@ -162,10 +162,10 @@ $(document).ready(function() {
 
 @section('content')
 
-	 <div class="container-fluid">
-		<div class="row-fluid">
+	 <div class="container">
+		<div class="row">
 		
-			<div class="sidebar-nav left">
+			<div class="span3">
 				
 				<div class="well">
 					<div id="inboxinfoview"></div>
@@ -180,7 +180,7 @@ $(document).ready(function() {
 				</div>
 			</div>
 			
-			<div class="content fixed-270">	        
+			<div class="span9">	        
 				<div role="main" id="main">
 
 					<div id="info_box" class="well">

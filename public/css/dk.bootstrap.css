@@ -216,35 +216,4 @@
 -------- Bootstrap Modifications --------
 */
 	
-.row-fluid > .sidebar-nav {
-    position: relative;
-    top: 0;
-    left:auto;
-    width: 250px;
-}
 
-.left {
-    float:left;
-}
-
-.right {
-    float:right;
-}
-
-.fixed-270 {
-    margin-left: 270px;
-}
-
-.row-fluid .container-400 {
-    position: relative;
-    top: 0;
-    left:auto;
-    width: 400px;
-}
-
-.fixed-400 {
-    margin-left: 460px;
-}
-
-
-	

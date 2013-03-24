@@ -2,7 +2,6 @@
 
 @section('header')
 
-
 {{HTML::script('/js/underscore.min.js')}}
 {{HTML::script('/js/backbone.min.js')}}
 
@@ -10,10 +9,18 @@
 {{HTML::script('/js/dk.jplayer.min.js')}}
 {{HTML::script('/js/bootstrap-datepicker.js')}}
 
-<link href="/css/skin/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
+{{HTML::style('/css/skin/jplayer.blue.monday.css')}}
 {{HTML::style('/css/datepicker.css')}}
 
 <style type="text/css">
+
+#loading {
+	padding-top: 50px;
+	text-align: center;
+	background:#fff;
+	display:none;
+	position:absolute;
+}
 
 #results tbody tr {
 	cursor: pointer;
@@ -48,94 +55,8 @@
 }
 </style>
 
-<script>
 
-
-var view = {
-
-	/**
-	 * ModelView implements a generic view for displaying an individual model
-	 * as an editable form.
-	 * Note that the property templateEl must be set after instantiation
-	 */
-	ModelView: Backbone.View.extend({
-
-		/** @var automatically update the model on every change (recommended value is false)  */
-		automaticallyUpdateModel: false,
-
-		/** @var override backbone.events - handle when the view has been changed */
-		events: { 'change': 'handleViewChange' },
-
-		/** initialize is fired by backbone */
-		initialize: function(options) {
-
-			if (this.model) this.model.bind('change', this.handleModelChange, this);
-			
-			/*
-			// allow the custom options to be initialized at construction
-			if (options.templateEl) this.templateEl = options.templateEl;
-			if (options.automaticallyUpdateModel) this.automaticallyUpdateModel = options.automaticallyUpdateModel;
-
-			if (options.on) {
-				for (evt in options.on) {
-					this.on(evt,options.on[evt]);
-				}
-			}
-			*/
-			
-		},
-		
-
-		/** render populates the container element with contents of the template */
-		render: function() {
-
-			// if this.el is null then it's likely that the collection view was initialized prior to document.ready firing
-			if (typeof(this.el) == 'undefined' && console) console.warn('ModelView.render element is not defined.  Model may not render properly.');
-
-			var item = this.model.attributes;
-			var compiledTemplate = Mustache.getTemplate('editmetadata');
-			$(this.el).html(compiledTemplate(item));
-
-			this.trigger('rendered');
-		},
-
-		/** if model changes re-render */
-		handleModelChange: function(ev) {
-			this.render();
-		},
-
-		/**
-		 * fires when the view has changed (normally via user input).  When the user
-		 * updates the value of a form input within the view, this will fire.
-		 *
-		 * If automaticallyUpdateModel=true then model changes will be posted to the
-		 * server automatically
-		 *
-		 * Implementing this can put a lot of load on the server because an update
-		 * will be sent on every field change.  It is likely preferable to
-		 * wait until a "save" button is clicked instead and save the changes all
-		 * at once.
-		 */
-		handleViewChange: function(ev) {
-
-			if (this.automaticallyUpdateModel) {
-
-				var name = event.target.name;
-				var newValue = $(event.target).val();
-
-				var options = {};
-				options[name] = newValue;
-
-				// post model change to server (which will fire a change event on the model)
-				model.set(options);
-			}
-		}
-	}),
-
-	version: 1.0
-
-}
-
+<script type="text/javascript">
 
 var page = {
 
@@ -182,7 +103,7 @@ var page = {
 			collection: page.songs,
 		});
 		
-		this.modelView = new view.ModelView({
+		this.modelView = new dkMusic.Views.SongDetailView({
 			el: $("#songDetailDialog .modal-body"),
 		});
 		
@@ -232,7 +153,6 @@ var page = {
 
 	fetchSongs: function(params, hideLoader) {
 		page.fetchParams = params;
-		//console.log(page.fetchParams);
 
 		page.fetchInProgress = true;
 		
@@ -243,9 +163,6 @@ var page = {
 		page.fetchXhr = page.songs.fetch({
 			data: params,
 			success: function() {
-				
-				//console.log(page.songs.models);
-				
 				if (page.songs.collectionHasChanged) {
 					page.collectionView.render();
 				}
@@ -255,8 +172,6 @@ var page = {
 			},
 
 			error: function(m, r) {
-				//app.appendAlert(app.getErrorMessage(r), 'alert-error',0,'collectionAlert');
-				//console.log('error');
 				page.fetchInProgress = false;
 			}
 
@@ -282,8 +197,6 @@ var page = {
 		page.song.save({
 			'artist': $('#songDetailDialog input#artist').val(),
 			'title': $('#songDetailDialog input#title').val(),
-			'genre': $('#songDetailDialog input#genre').val(),
-			'year': $('#songDetailDialog input#year').val(),
 		}, {
 			wait: true,
 			success: function(){
@@ -338,6 +251,8 @@ $(document).ready(function () {
 	
 	$('input,select').keypress(function(event) { return event.keyCode != 13; });
 	
+	$('#searchstring').focus();
+	
 	$('.datepicker').datepicker( {
 		format	:	"yyyy-mm-dd",
 		autoclose: true,
@@ -360,38 +275,7 @@ $(document).ready(function () {
   		},
     });
     
-    /*
-	$('#results').bind('update', function() {
-		$('#results a').bind('click', function(e){
-			e.preventDefault();
-			
-		    var song = $(this).attr('href');
-
-			$('.isPlaying').html('<i class="icon-play"></i>');
-			$('#results a').removeClass('isPlaying');
-			
-			if (isplaying==0 || songplaying!=song) {
-				playsong(song);
-				isplaying =1;
-				songplaying = song;
-				$(this).html('<i class="icon-stop"></i>');
-				$(this).addClass('isPlaying');
-			} else {
-				$("#jquery_jplayer_1").jPlayer("stop");
-				isplaying=0;
-				songplaying = '';
-				$(this).html('<i class="icon-play"></i>');
-			}
-			
-		return false;
-		    
-		});
-	});
-	*/
-	
-	
-			
-	
+    	
 });
 
 
@@ -441,39 +325,39 @@ $(document).ready(function () {
 						<div class="span3">
 							<div id="jquery_jplayer_1" class="jp-jplayer"></div>
 							<div id="jp_container_1" class="jp-audio">
-							<div class="jp-type-single">
-								<div class="jp-gui jp-interface">
-									<ul class="jp-controls">
-										<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
-										<li><a href="javascript:;" class="jp-pause" tabindex="1" style="display: none; ">pause</a></li>
-										<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
-										<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
-										<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute" style="display: none; ">unmute</a></li>
-										<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
-									</ul>
-									
-									<div class="jp-volume-bar">
-										<div class="jp-volume-bar-value" style="width: 100%; "></div>
-									</div>
-									<div class="jp-time-holder">
-										<div class="jp-current-time">00:00</div>
-										<div class="jp-duration">00:00</div>
-	
-										<ul class="jp-toggles">
-											<li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat" style="display: block; ">repeat</a></li>
-											<li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off" style="display: none; ">repeat off</a></li>
+								<div class="jp-type-single">
+									<div class="jp-gui jp-interface">
+										<ul class="jp-controls">
+											<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+											<li><a href="javascript:;" class="jp-pause" tabindex="1" style="display: none; ">pause</a></li>
+											<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+											<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+											<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute" style="display: none; ">unmute</a></li>
+											<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
 										</ul>
+										
+										<div class="jp-volume-bar">
+											<div class="jp-volume-bar-value" style="width: 100%; "></div>
+										</div>
+										<div class="jp-time-holder">
+											<div class="jp-current-time">00:00</div>
+											<div class="jp-duration">00:00</div>
+		
+											<ul class="jp-toggles">
+												<li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat" style="display: block; ">repeat</a></li>
+												<li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off" style="display: none; ">repeat off</a></li>
+											</ul>
+										</div>
 									</div>
-								</div>
-	
-							<div id="jp_playlist" class="jp-playlist">&nbsp;</div>
-							<div class="jp-progress">
-								<div class="jp-seek-bar" style="width: 100%; ">
-									<div class="jp-play-bar" style="width: 0%; "></div>
+		
+									<div id="jp_playlist" class="jp-playlist">&nbsp;</div>
+									<div class="jp-progress">
+										<div class="jp-seek-bar" style="width: 100%; ">
+											<div class="jp-play-bar" style="width: 0%; "></div>
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
-				</div>
 						</div>
 					
 					</div>					
@@ -517,6 +401,6 @@ $(document).ready(function () {
 		</div>
 	</div>		
 	
-	<div id="loading" style="text-align: center; background:#fff; display:none; position:absolute;"><i class="icon-spinner icon-3x icon-spin"></i></div>
+	<div id="loading"><i class="icon-spinner icon-3x icon-spin"></i></div>
 	
 @endsection

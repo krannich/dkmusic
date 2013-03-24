@@ -2,11 +2,6 @@
 
 @section('header')
 
-{{HTML::script('/js/jquery.jplayer.min.js')}}
-{{HTML::script('/js/dk.jplayer.min.js')}}
-
-<link href="/css/skin/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
-
 <style>
 #results td:first-child {
 	width: 30px;
@@ -52,34 +47,6 @@ $(document).ready(function () {
   		},
     });
     
-	$('#results').bind('update', function() {
-		$('#results a').bind('click', function(e){
-			e.preventDefault();
-			
-		    var song = ($(this).attr('href'));
-	
-			$('.isPlaying').html('<img src="img/but_play.png" />');
-			
-			if (isplaying==0 || songplaying!=song) {
-			
-				playsong(song);
-	
-				isplaying =1;
-				songplaying = song;
-				($(this).html('<img src="img/but_stop.png" />'));
-				($(this).addClass('isPlaying'));
-			} else {
-				$("#jquery_jplayer_1").jPlayer("stop");
-				isplaying=0;
-				songplaying = '';
-				($(this).html('<img src="img/but_play.png" />'));
-			}
-			
-		return false;
-		    
-		});
-	});
-	
 	
 	$('#myTab a').click(function (e) {
 		e.preventDefault();
@@ -96,56 +63,19 @@ $(document).ready(function () {
 @section('content')
 
 
-	 <div class="container-fluid">
-		<div class="row-fluid">
+	 <div class="container">
+		<div class="row">
 		
-			<div class="sidebar-nav left">
+			<div class="span3">
 				<div class="well">		
 					<h2 class="normal">Modifier</h2>
 				
 					<hr />
 					
-					<div id="jquery_jplayer_1" class="jp-jplayer"></div>
-						<div id="jp_container_1" class="jp-audio">
-							<div class="jp-type-single">
-								<div class="jp-gui jp-interface">
-									<ul class="jp-controls">
-										<li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
-										<li><a href="javascript:;" class="jp-pause" tabindex="1" style="display: none; ">pause</a></li>
-										<li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
-										<li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
-										<li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute" style="display: none; ">unmute</a></li>
-										<li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
-									</ul>
-									
-									<div class="jp-volume-bar">
-										<div class="jp-volume-bar-value" style="width: 100%; "></div>
-									</div>
-									<div class="jp-time-holder">
-										<div class="jp-current-time">00:00</div>
-										<div class="jp-duration">00:00</div>
-
-										<ul class="jp-toggles">
-											<li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat" style="display: block; ">repeat</a></li>
-											<li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off" style="display: none; ">repeat off</a></li>
-										</ul>
-									</div>
-								</div>
-
-							<div id="jp_playlist" class="jp-playlist">&nbsp;</div>
-							<div class="jp-progress">
-								<div class="jp-seek-bar" style="width: 100%; ">
-									<div class="jp-play-bar" style="width: 0%; "></div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-
 				</div>
 			</div>
 			
-			<div class="content fixed-270">	        
+			<div class="span9">	        
 				<div role="main" id="main">
 
 					<div class="well">

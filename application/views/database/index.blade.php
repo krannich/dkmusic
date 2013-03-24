@@ -293,26 +293,23 @@ $(document).ready(function() {
 
 @section('content')
 
-	 <div class="container-fluid">
-		<div class="row-fluid">
+	 <div class="container">
+		<div class="row">
 		
-			<div class="sidebar-nav left">
+			<div class="span3">
 				<div class="well">	
 					<h2 class="normal">Database</h2>	
 					<hr />
-					<p><button class="btn btn-max scannewqueue">Scan for new songs</button></p>
-					<p><button class="btn btn-max scanremovedqueue">Scan for removed songs</button></p>
+					<p><button class="btn btn-max scannewqueue">New songs</button></p>
+					<p><button class="btn btn-max scanremovedqueue">Removed songs</button></p>
 					<hr />
-					<p><button class="btn btn-max btn-warning rescan">Rescan fingerprint/acoustID</button></p>
+					<p><span class="label label-warning">Attention!</span> Handle with care!</p>
+					<p><button class="btn btn-max btn-warning rescan">Rescan fingerprint</button></p>
 					<p><button class="btn btn-max btn-warning renamequeue">Rename modified songs</button></p>
-					<hr />
-					<p>Here you can check if your database is up-to-date.</p>
-					<p>You can also rename files where artist/title do not match filename.</p>
-
 				</div>
 			</div>
 			
-			<div class="content fixed-270">	        
+			<div class="span9">	        
 				<div role="main" id="main">
 
 					<div class="well">

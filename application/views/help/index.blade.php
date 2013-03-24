@@ -8,21 +8,19 @@
 @section('content')
 
 
-	 <div class="container-fluid">
-		<div class="row-fluid">
+	 <div class="container">
+		<div class="row">
 		
-			<div class="sidebar-nav left">
+			<div class="span3">
 				<div class="well">		
 					<h2 class="normal">Help</h2>
 				
 					<hr />
-					
-
 
 				</div>
 			</div>
 			
-			<div class="content fixed-270">	        
+			<div class="span9">	        
 				<div role="main" id="main">
 
 					<div class="well">

@@ -4,7 +4,7 @@
 
 @section('content')
 
-
+	<div class="container">
 
 	<h1>Settings</h1>
 
@@ -130,5 +130,7 @@
 		</fieldset>
 
 	{{Form::close();}}
+	
+	</div>
 	
 @endsection

@@ -324,17 +324,17 @@ $(document).ready(function() {
 
 @section('content')
 
-	 <div class="container-fluid">
-		<div class="row-fluid">
+	 <div class="container">
+		<div class="row">
 		
-			<div class="sidebar-nav left">
+			<div class="span3">
 				<div class="well">	
 					<h2 class="normal">Duplicates</h2>	
 
 					<hr />
-					<p><button class="btn btn-max getdupacoustids">Get duplicate AcoustIDs</button></p>
-					<p><button class="btn btn-max getdupfingerprints">Get duplicate Fingerprints</button></p>
-					<p><button class="btn btn-max getdupartisttitle">Get duplicate Artist/Title</button></p>
+					<p><button class="btn btn-max getdupacoustids">Duplicate AcoustIDs</button></p>
+					<p><button class="btn btn-max getdupfingerprints">Duplicate Fingerprints</button></p>
+					<p><button class="btn btn-max getdupartisttitle">Duplicate Artist/Title</button></p>
 
 					<hr />
 					<div id="jquery_jplayer_1" class="jp-jplayer"></div>
@@ -376,7 +376,7 @@ $(document).ready(function() {
 				</div>
 			</div>
 			
-			<div class="content fixed-270">	        
+			<div class="span9">	        
 				<div role="main" id="main">
 					
 					<div id="results" class="well">
