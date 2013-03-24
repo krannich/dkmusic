@@ -15,7 +15,8 @@
 
                 <li{{@((strpos(URL::current(),'modifier') 	!==false  ) ? ' class="active"' : '' );}}><a href="/modifier">Modifier</a></li>
 
-                <li{{@((strpos(URL::current(),'duplicates') !==false  ) ? ' class="active"' : '' );}}><a href="/duplicates">Duplicates</a></li>
+                <li{{@((strpos(URL::current(),'duplicates') !==false  ) ? ' class="active"' : '' );}}><a href="/duplicates">Dup</a></li>
+                <li{{@((strpos(URL::current(),'duplicates2') !==false  ) ? ' class="active"' : '' );}}><a href="/duplicates2"><i class="icon-copy"></i></a></li>
 
                 <li{{@((strpos(URL::current(),'playlists') 	!==false  ) ? ' class="active"' : '' );}}><a href="/playlists">Playlists</a></li>
 

@@ -7,6 +7,7 @@ Route::controller(array(
 	'inbox',
 	'modifier',
 	'duplicates',
+	'duplicates2',
 	'playlists',
 	
 	'notordner',
