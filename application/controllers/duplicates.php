@@ -73,11 +73,13 @@ class Duplicates_Controller extends Base_Controller {
 
 			$results = array();
 			foreach ($songs as $song) {
-				$results[] = array(
-					'acoustid'=>$song->acoustid_acoustid,
-					'acoustid_and_filename'=>$song->acoustid_acoustid . '<br />' . $song->filename,
-					'duplicates'=>$song->duplicates,
-				);
+				if ($song->acoustid_acoustid!="") {
+					$results[] = array(
+						'acoustid'=>$song->acoustid_acoustid,
+						'acoustid_and_filename'=>$song->acoustid_acoustid . '<br />' . $song->filename,
+						'duplicates'=>$song->duplicates,
+					);
+				}
 			}
 			return json_encode($results);
 		
@@ -147,19 +149,19 @@ class Duplicates_Controller extends Base_Controller {
 			$results = array();
 			
 			foreach ($songs as $song) {
-			
-				$html_file_link = addslashes($song->folder.DS.rawurlencode($song->filename));		
-
-				$results[] = array(
-					'id'=>$song->id,
-					'filename'=>$song->filename,
-					'artist'=>$song->artist,
-					'title'=>$song->title,
-					'size'=>dkHelpers::format_size($song->size),
-					'playbutton'=>'<a href="'. $html_file_link .'"><img src="img/but_play.png" title="' . $song->folder . '/' . $song->filename. '"/></a>',
-					'bitrate'=>$song->bitrate,
-					'length'=>$song->length,
-				);
+				if ($song->acoustid_fingerprint!="") {
+					$html_file_link = addslashes($song->folder.DS.rawurlencode($song->filename));		
+						$results[] = array(
+						'id'=>$song->id,
+						'filename'=>$song->filename,
+						'artist'=>$song->artist,
+						'title'=>$song->title,
+						'size'=>dkHelpers::format_size($song->size),
+						'playbutton'=>'<a href="'. $html_file_link .'"><img src="img/but_play.png" title="' . $song->folder . '/' . $song->filename. '"/></a>',
+						'bitrate'=>$song->bitrate,
+						'length'=>$song->length,
+					);
+				}
 			}
 
 			return json_encode($results);

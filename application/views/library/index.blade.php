@@ -11,14 +11,6 @@
 
 <style type="text/css">
 
-#loading {
-	padding-top: 50px;
-	text-align: center;
-	background:#fff;
-	display:none;
-	position:absolute;
-}
-
 #results tbody tr {
 	cursor: pointer;
 }
@@ -31,7 +23,6 @@
 #results td:first-child a {
 	text-decoration: none;
 	color: #e0e0e0;
-	font-size: 18px;
 }
 
 #results td:first-child a.isPlaying,
@@ -55,6 +46,27 @@
 
 <script type="text/javascript">
 
+var tablemenu = {
+    'position'      :   'after',
+    'menu_items'    : {
+    	/*
+        'edit' 		: {
+            'url'           :   '',
+            'title'         :   'edit',
+            'icon'          :   'icon-pencil icon-big',
+            'js'			:	'page.editSong(url)',
+        },
+        */
+        'del' 		: {
+            'url'           :   '',
+            'title'         :   'delete',
+            'icon'          :   'icon-remove icon-big icon-red',
+            'js'			:	'page.deleteSong(url)',
+        },
+    },
+};
+
+
 var page = {
 
 	songs: new dkMusic.Collections.SongCollection(),
@@ -69,22 +81,15 @@ var page = {
 	dialogIsOpen: false,
 
 	init: function() {
-	
-		if (!$.isReady && console) console.warn('page was initialized before dom is ready.  views may not render properly.');
-		
-		$('#searchstring').bind('keyup', function(obj){
 			
-			page.loading();
-						
+		$('#searchstring').bind('keyup', function(obj){
+			page.loading(true);
 			page.fetchParams.searchstring = $('#searchstring').val();
 			page.fetchSongs(page.fetchParams);
 		});
 		
-		
 		$('#searchdate').bind('change', function(obj) {
-		
-			page.loading();
-			
+			page.loading(true);
 			page.fetchParams.searchdate = $('#searchdate').val();
 			page.fetchSongs(page.fetchParams);
 		});
@@ -93,7 +98,6 @@ var page = {
 			e.preventDefault();
 			page.updateModel();
 		});
-		
 		
 		this.collectionView = new dkMusic.Views.SongCollectionView({
 			el: $("#results > tbody"),
@@ -104,11 +108,11 @@ var page = {
 			el: $("#songDetailDialog .modal-body"),
 		});
 		
-		// make the rows clickable ('rendered' is a custom event, not a standard backbone event)
 		this.collectionView.on('rendered',function(){
 			$('#results > tbody > tr').bind('dblclick', function(e) {
 				e.preventDefault();
-				var selected_song = page.songs.get($(this).attr('dkdata_id'));
+				var dk_data = eval('([' + $(this).attr('dk_data') + '])')[0];
+				var selected_song = page.songs.get(dk_data.id);
 				page.showDetailDialog(selected_song);
 			});
 			
@@ -141,6 +145,7 @@ var page = {
 				
 			});
 
+			$('#results').tablemenu(tablemenu);
 
 		});
 			
@@ -164,7 +169,7 @@ var page = {
 					page.collectionView.render();
 				}
 				
-				$('#loading').hide();
+				page.loading(false);
 				page.fetchInProgress = false;
 			},
 
@@ -184,9 +189,44 @@ var page = {
 	},
 	
 	renderModelView: function() {
-
 		page.modelView.render();
+	},
+	
+	editSong: function(id) {
+		var selected_song = page.songs.get(id);
+		page.showDetailDialog(selected_song);
+	},
+	
+	deleteSong: function(id) {
+		var selected_song = page.songs.get(id);
+		bootbox.confirm("Do you really want to delete<br /><strong>" + selected_song.attributes.filename +"</strong>", function(result){
+			if(result) {
+				page.deleteModel(selected_song);
+			} else {
+				return;
+			}
+		});
+	},
+	
+	deleteModel: function(selected_song) {
+		page.song = selected_song;
+		page.song.destroy({
+			wait: true,
+			success: function(){
+				
+				$.pnotify({
+			    	text: selected_song.attributes.filename + ' moved into trash folder!',
+			    	type: 'success'
+			    });
+			    
+				page.collectionView.render();
+			},
+			error: function(model,response,scope){
+				
+				alert ('error');
 
+			}
+		});
 	},
 	
 	updateModel: function() {
@@ -198,13 +238,9 @@ var page = {
 			wait: true,
 			success: function(){
 				$('#songDetailDialog').modal('hide');
-				
-				if (model.reloadCollectionOnModelUpdate) {
-					page.fetchSongs(page.fetchParams,true);
-				}
+				page.fetchSongs(page.fetchParams,true);
 		},
 			error: function(model,response,scope){
-
 				alert ('error');
 				/*
 				try {
@@ -226,17 +262,21 @@ var page = {
 		});		
 	},
 	
-	loading: function() {
-		var t_el = $("#results > tbody");
-		$("#loading").css({
-		  opacity: 0.5,
-		  top: t_el.offset().top,
-		  width: t_el.outerWidth(),
-		  height: t_el.outerHeight()
-		});
-		$("#loading").show();
+	loading: function(is_loading) {
+			if (is_loading===true) {
+			var t_el = $("#results > tbody");
+			$("#loading-table").css({
+			  opacity: 1,
+			  top: t_el.offset().top,
+			  width: t_el.outerWidth(),
+			  height: t_el.outerHeight()
+			});
+			$("#loading-table").show();
+		} else {
+			$("#loading-table").hide();
+			
+		}
 	}
-
 
 };
 
@@ -259,7 +299,6 @@ $(document).ready(function () {
    		todayBtn: true,
 	});
 	
-	    
     $("#results").tablesorter({
         widgets: ['stickyHeaders'],
         sortList: [[1,0]],
@@ -271,13 +310,8 @@ $(document).ready(function () {
 	    	stickyHeadersOffset : 40,
   		},
     });
-    
     	
 });
-
-
-
-
 
 </script>
 
@@ -290,9 +324,11 @@ $(document).ready(function () {
 			<div class="span12">
 				<div class="well" style="padding-bottom: 0;">
 					<div class="row-fluid">
-				
+						<div class="span3">
+							<h2 class="normal">Library</h2>
+						</div>
+
 						<div class="span9">
-							<h2 class="normal pull-left" style="margin-right: 75px;">Library</h2>
 
 							{{Form::open('', 'get', array('id'=>'results_form', 'class'=>"form-horizontal")  );}}
 								<fieldset>
@@ -318,11 +354,6 @@ $(document).ready(function () {
 								</fieldset>
 							{{Form::close()}}
 						</div>
-						
-						<div class="span3">
-
-						</div>
-					
 					</div>					
 				</div>
 			</div>
@@ -363,7 +394,5 @@ $(document).ready(function () {
 			<button id="saveSongButton" class="btn btn-primary">Save Changes</button>
 		</div>
 	</div>		
-	
-	<div id="loading"><i class="icon-spinner icon-3x icon-spin"></i></div>
 	
 @endsection

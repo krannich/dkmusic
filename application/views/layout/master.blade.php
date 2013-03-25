@@ -160,10 +160,12 @@
     <div class="container">
 
 		@yield('content')
+		<div id="loading-table"><i class="icon-spinner icon-3x icon-spin"></i></div>
 
     </div>
     
-    <div class="modal-loading"></div>
+    <div class="modal-loading"><div class="spinner-container"><i class="icon-spinner icon-3x icon-spin"></i></div></div>
+
 </body>
 </html>
 

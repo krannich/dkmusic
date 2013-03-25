@@ -324,15 +324,14 @@ $(document).ready(function() {
 				<div class="well" style="padding-bottom: 0;">
 					<div class="row-fluid">
 				
-						<div class="span3">
-							<h2 class="normal">Duplicates</h2>
-						</div>
-						<div class="span9">
-							<div class="btn-group" data-toggle="buttons-radio" style="margin-top: 15px;">
-								<button type="button" class="btn getdupacoustids">Duplicate AcoustIDs</button>
-								<button type="button" class="btn getdupfingerprints">Duplicate Fingerprints</button>
-								<button type="button" class="btn getdupartisttitle">Duplicate Artist/Title</button>
+						<div class="span12">
+							<h2 class="normal pull-left" style="margin-right: 75px;">Duplicates</h2>
+							<div>
+								<button class="btn getdupacoustids">Duplicate AcoustIDs</button>
+								<button class="btn getdupfingerprints">Duplicate Fingerprints</button>
+								<button class="btn getdupartisttitle">Duplicate Artist/Title</button>
 							</div>
+							
 						</div>
 											
 					</div>					

@@ -67,7 +67,7 @@ a.jp-play:hover {
 
 a.jp-pause {
 	display: none;
-	color: #08c !important;
+	color: #fff !important;
 }
 
 a.jp-pause:hover {}
@@ -102,7 +102,7 @@ div.jp-seek-bar {
 }
 
 div.jp-play-bar {
-	background: #08c;
+	background: #aaa;
 	width:0px;
 	height:100%;
 }
@@ -112,7 +112,6 @@ div.jp-seeking-bg {
 }
 
 /* @end */
-
 
 /* @group current time and duration */
 div.jp-audio div.jp-time-holder {

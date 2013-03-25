@@ -19,7 +19,6 @@
 -------- Loading Animation --------
 */
 
-	
 .modal-loading {
     display:    none;
     position:   fixed;
@@ -28,10 +27,7 @@
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba( 255, 255, 255, .8 )
-                url('/img/loading.gif')
-                50% 50%
-                no-repeat;
+    background: rgba( 255, 255, 255, .8 );
 }
 
 body.loading {
@@ -41,6 +37,25 @@ body.loading {
 body.loading .modal-loading {
     display: block;
 }
+
+body.loading .modal-loading .spinner-container {
+	width:270px;
+	height:150px;
+	position:absolute;
+	left:50%;
+	top:50%;
+	margin:-75px 0 0 -135px;
+	text-align: center;
+}
+
+#loading-table {
+	position:absolute;
+	padding-top: 50px;
+	text-align: center;
+    background: rgba( 255, 255, 255, .8 );
+	display:none;
+}
+
 
 /*
 -------- Table Styles --------

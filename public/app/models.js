@@ -30,7 +30,7 @@ dkMusic.Models.InboxInfo = Backbone.Model.extend({
 
 dkMusic.Models.SongModel = Backbone.Model.extend({
 	
-	urlRoot: '/library/edit',
+	urlRoot: '/library/song',
 	
 	idAttribute: 'id',
 	id: '',

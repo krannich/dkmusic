@@ -12,7 +12,6 @@ class Librarysong extends Song {
 
 	public static $table = "library";
 
-
 	public static function get_filelist_of_incorrect_acoustid_in_folder($folder = "") {
 		$entries = DB::table(self::$table)
 			->where('library.folder' ,'=', $folder)

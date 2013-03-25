@@ -1,0 +1,69 @@
+/* Tablemenu
+jQuery plugin using Twitter Bootstrap, Font Awesome and Bootbox.js 
+--------------------------------------------------------------------------------------------
+
+License
+--------------------------------------------------------------------------------------------
+The Font Awesome webfont, CSS, and LESS files are licensed under CC BY 3.0:
+http://creativecommons.org/licenses/by/3.0/ A mention of
+'Tablemenu - https://github.com/krannich/tablemenu' in human-readable
+source code is considered acceptable attribution (most common on the web).
+If human readable source code is not available to the end user, a mention in
+an 'About' or 'Credits' screen is considered acceptable (most common in desktop
+or mobile software).
+
+Contact
+--------------------------------------------------------------------------------------------
+Email: dennis@krannich.de
+Twitter: http://twitter.com/krannich
+Work: http://krannich.de
+
+*/
+
+#tablemenu_context_menu {
+	position: absolute;
+	display: none;
+	border: 1px solid rgb(221, 221, 221);
+	background: #fefefe;
+	background-image: -webkit-linear-gradient(top, #fefefe, #d0d0d0);
+	background-image: -moz-linear-gradient(top, #fefefe, #d0d0d0);
+	background-image: linear-gradient(top, #fefefe, #d0d0d0);
+}
+
+#tablemenu_context_menu > button {
+	margin-right: 5px;
+}
+
+#tablemenu_context_menu > button:first-child {
+	margin-left: 5px;
+}
+
+#tablemenu_context_menu.left {
+	text-align: left;	
+}
+
+#tablemenu_context_menu.right {
+	text-align: right;
+}
+
+#tablemenu_context_menu > button > i .icon-big:before {
+  vertical-align: top;
+  font-size: 1.3333333333333333em;
+}
+
+#tablemenu_context_menu > button > i .icon-big[class^="icon-"], #tablemenu_context_menu > button > i .icon-big[class*=" icon-"] {
+  line-height: 1.5em;
+  width: 1.25em;
+}
+
+#tablemenu_context_menu > button > i .icon-green {
+	color: #0a0;
+}
+
+#tablemenu_context_menu > button > i .icon-red {
+	color: #a00;
+}
+
+#tablemenu_context_menu > button[disabled=disabled] > i {
+	color: #999;
+}

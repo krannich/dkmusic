@@ -8,8 +8,15 @@ class Library_Controller extends Base_Controller {
 		return View::make('library.index');
 	}
 	
+	public function delete_song($id) {
+		$song = Librarysong::find($id);
+		DB::table('library')->where('id', '=', $id)->delete();
+		DB::table('library_metadata')->where('library_id', '=', $id)->delete();
+		dkHelpers::move_file( dkmusic_library . dkHelpers::get_folder_prefix($song->filename) . '/' . $song->filename, dkmusic_trash . $song->filename );
+		return "[]";
+	}
 	
-	public function put_edit($id) {
+	public function put_song($id) {
 		
 		$input = Input::json();
 		
