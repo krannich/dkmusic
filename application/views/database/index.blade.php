@@ -90,13 +90,12 @@ function init_table() {
 
 $(document).ready(function() {
 	
-	$("body").on({
-	    ajaxStart: function() {
-	        $(this).addClass("loading");
-	    },
-	    ajaxStop: function() {
-	        $(this).removeClass("loading");
-	    }    
+	$(document).ajaxStart(function() {
+		$('body').addClass("loading");
+	});
+	
+	$(document).ajaxStop(function() {
+		$('body').removeClass("loading");
     });
 
 	$('#results_table').bind('update', function() {
@@ -276,10 +275,7 @@ $(document).ready(function() {
 			
 		}
 	});
-	
-	
-	
-	
+
 	
 	init_table();
 

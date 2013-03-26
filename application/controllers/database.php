@@ -8,7 +8,6 @@ class Database_Controller extends Base_Controller {
 		return View::make('database.index');
 	}
 	
-	
 	public function get_databaseinfo() {
 		if (Request::ajax()) {
 
@@ -52,25 +51,34 @@ class Database_Controller extends Base_Controller {
 
 			if ($folder = Input::get('folder') ) {
 				
-				$files = DB::query('select * FROM library where folder = "'. $folder .'" AND CONCAT(artist," - ",title, ".mp3") != filename');
+				$files = DB::query('select * FROM library where folder = "'. $folder .'" AND CONCAT(artist," - ",title, ".mp3") != filename ORDER BY id');
 								
 				foreach ($files as $file) {
-					
+					$file_id = $file->id;
 					$orig_filename = $file->filename;
-					$new_filename = $file->artist . ' - ' . $file->title . '.mp3';
+					$new_filename = dkHelpers::well_formed_artist($file->artist) . ' - ' . dkHelpers::well_formed_string($file->title) . '.mp3';
+					
+					// ID3TAGS Schreiben!!
 					
 					$orig_fullpath = dkmusic_library . $folder . DS . $orig_filename;
 					$new_fullpath = dkmusic_library . dkHelpers::get_folder_prefix($new_filename) . DS . $new_filename;
 					
-					$return_filename = dkHelpers::move_file( $orig_fullpath, $new_fullpath );
-
-					DB::table('library')->where('filename', '=', $orig_filename)->update(array('filename' => $return_filename));
-
-					if ($return_filename == $new_filename) {						
-						$results[] = '<p><span class="label label-success">OK</span> ' . $new_fullpath . '</p>';
+					if (file_exists($orig_fullpath)) {
+					
+						$return_filename = dkHelpers::move_file( $orig_fullpath, $new_fullpath );
+	
+						DB::table('library')->where('id', '=', $file_id)->update(array('filename' => $return_filename));
+	
+						if ($return_filename == $new_filename) {						
+							$results[] = '<p><span class="label label-success">OK</span> ' . $new_fullpath . '</p>';
+						} else {
+							$results[] = '<p><span class="label label-warning">ERROR</span> There is another file of this artist with the same title.<br />' . $return_filename . '</p>';						
+						}
+					
 					} else {
-						$results[] = '<p><span class="label label-warning">ERROR</span> ' . $return_filename . '</p>';						
+						$results[] = '<p><span class="label label-warning">ERROR</span> File does not exist.<br />' . $return_filename . '</p>';						
 					}
+					
 					
 				}				
 				

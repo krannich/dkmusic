@@ -20,6 +20,7 @@ class Duplicates_Controller extends Base_Controller {
 			
 			DB::table('library')->where('id', '=', $file_id)->delete();
 			DB::table('library_metadata')->where('library_id', '=', $file_id)->delete();
+			DB::table('hash_acoustid_fingerprint')->where('library_id', '=', $id)->delete();
 			
 			dkHelpers::move_file( dkmusic_library . dkHelpers::get_folder_prefix($song->filename) . '/' . $song->filename, dkmusic_trash . $song->filename );
 

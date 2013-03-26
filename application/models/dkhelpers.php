@@ -66,7 +66,7 @@ class dkHelpers {
 			'$' => 's',
 			
 			'_' => ' ',
-			
+			':' => ' - ',
 			"'" => '',
 			'"' => '',
 			"´" => '',
@@ -76,8 +76,8 @@ class dkHelpers {
 			"]" => ")",
 			"?" => "",
 			"!" => "",
-			'/' => "-",
-			'\\' => "-",
+			'/' => " - ",
+			'\\' => " - ",
 
 			" featuring " => " ft ",
 			" feat. " => " ft ",
@@ -140,7 +140,7 @@ class dkHelpers {
 
 	public static function remove_bad_characters($string) {
 		$replace_characters = array(
-			"/" => "-",
+			"/" => " - ",
 		);
 		return strtr( $string, $replace_characters );
 	}
@@ -168,8 +168,9 @@ class dkHelpers {
 	}
 	
 	public static function move_file($file_from, $file_to) {
+		$rand = self::random_number(10);
 		if (file_exists($file_to)) {
-			$file_to = substr( $file_to, 0, -4 ) . ' - ' . time() . '.' . File::extension( $file_to );
+			$file_to = substr( $file_to, 0, -4 ) . ' - ' . time() . ' - ' . $rand . '.' . File::extension( $file_to );
 		} 
 		rename( $file_from, $file_to );
 		return basename($file_to);
@@ -201,8 +202,13 @@ class dkHelpers {
 			
 	}
 	
-	
-	
+	public static function random_number($e){
+		$rand = "";
+		for($i=0;$i<$e;$i++){
+			$rand =  $rand .  rand(0, 9);  
+		}
+		return $rand;
+	}
 
 
 
