@@ -76,7 +76,7 @@ var page = {
 	statusCode: null,
 	fetchXhr: 0,
 
-	fetchParams: { searchstring: '', searchdate: '' },
+	fetchParams: { searchstring: '', searchdate_start: '', searchdate_end: '' },
 	fetchInProgress: false,
 	dialogIsOpen: false,
 
@@ -88,9 +88,15 @@ var page = {
 			page.fetchSongs(page.fetchParams);
 		});
 		
-		$('#searchdate').bind('change', function(obj) {
+		$('#searchdate_start').bind('change', function(obj) {
 			page.loading(true);
-			page.fetchParams.searchdate = $('#searchdate').val();
+			page.fetchParams.searchdate_start = $('#searchdate_start').val();
+			page.fetchSongs(page.fetchParams);
+		});
+		
+		$('#searchdate_end').bind('change', function(obj) {
+			page.loading(true);
+			page.fetchParams.searchdate_end = $('#searchdate_end').val();
 			page.fetchSongs(page.fetchParams);
 		});
 		
@@ -288,7 +294,6 @@ var page = {
 };
 
 
-
 $(document).ready(function () {
 
 	page.init();
@@ -304,6 +309,7 @@ $(document).ready(function () {
    		language: 'de',
    		weekStart: 1,
    		todayBtn: true,
+   		linked: true,
 	});
 	
     $("#results").tablesorter({
@@ -342,12 +348,18 @@ $(document).ready(function () {
 								<fieldset>
 		
 									<div class="input-append">
-										{{ Form::text('searchstring' , '', array('id' => 'searchstring', 'placeholder' => 'Search', 'autocomplete' => 'off')); }}
+										{{ Form::text('searchstring' , '', array('class' => 'input-xxlarge', 'id' => 'searchstring', 'placeholder' => 'Search', 'autocomplete' => 'off')); }}
 										<span class="add-on"><i class="icon-search"></i></span>
 									</div>
-									
+									<br />
+									Start date:
 									<div class="datepicker input-append date">
-										{{ Form::text('searchdate' , '', array('id' => 'searchdate', 'placeholder' => 'Date', 'class' => 'input-small', 'readonly' => 'readonly')); }}
+										{{ Form::text('searchdate_start' , '', array('id' => 'searchdate_start', 'placeholder' => 'Start date', 'class' => 'input-small', 'readonly' => 'readonly')); }}
+										<span class="add-on"><i class="icon-calendar"></i></span>
+									</div>
+									End date:
+									<div class="datepicker input-append date">
+										{{ Form::text('searchdate_end' , '', array('id' => 'searchdate_end', 'placeholder' => 'End date', 'class' => 'input-small', 'readonly' => 'readonly')); }}
 										<span class="add-on"><i class="icon-calendar"></i></span>
 									</div>
 									

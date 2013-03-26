@@ -103,7 +103,7 @@ class Inbox_Controller extends Base_Controller {
 					$song['metadata']['acoustid_fingerprint'] = $fingerprint;
 					$song['metadata']['acoustid_acoustid'] = $acoustid_data['acoustid'];
 					$song['metadata']['acoustid_score'] = $acoustid_data['score'];
-	
+					
 					$tagwriter = new getID3_write_id3v2;
 					$tagwriter->filename       = $fullpath;
 					$tagwriter->tagformats     = array('id3v2.3');

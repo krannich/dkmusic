@@ -66,9 +66,9 @@ class Duplicates_Controller extends Base_Controller {
 					library.filename,
 					library.artist,
 					library.title,
+					library.size,
 					library_metadata.bitrate,
 					library_metadata.length,
-					library_metadata.size,
 					library_metadata.library_id,
 					library_metadata.acoustid_acoustid
 				FROM library_metadata
@@ -117,9 +117,9 @@ class Duplicates_Controller extends Base_Controller {
 					library.filename,
 					library.artist,
 					library.title,
+					library.size,
 					library_metadata.bitrate,
 					library_metadata.length,
-					library_metadata.size,
 					library_metadata.library_id,
 					library_metadata.acoustid_fingerprint
 				FROM library_metadata

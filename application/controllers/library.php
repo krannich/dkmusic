@@ -93,12 +93,13 @@ class Library_Controller extends Base_Controller {
 		if (Request::ajax()) {
 			
 			$searchstring = Input::get('searchstring');
-			$searchdate = Input::get('searchdate');
+			$searchdate_start = Input::get('searchdate_start');
+			$searchdate_end = Input::get('searchdate_end');
 
 			//$searchstring = "Andre rieu";
 
-			if (strlen($searchstring) < 4 && strlen($searchdate) == 0 ) die('[]');
-			if (strlen($searchstring) == 0 && strlen($searchdate) < 10 ) die('[]');
+			if (strlen($searchstring) < 4 && strlen($searchdate_start) == 0 ) die('[]');
+			if (strlen($searchstring) == 0 && strlen($searchdate_start) < 10 ) die('[]');
 
 			if (substr($searchstring,-1) =="*") $searchstring=substr($searchstring,0,-1);
 			if (substr($searchstring,-1) !="%") $searchstring.="%";
@@ -106,14 +107,20 @@ class Library_Controller extends Base_Controller {
 
 			$searchstring = str_replace('*', '%', $searchstring);
 			
-			if (strlen($searchstring) >= 4 && strlen($searchdate) == 0) {
-				$songs = Librarysong::where('filename', 'LIKE', $searchstring)->get();
-			} else if (strlen($searchstring) == 0 && strlen($searchdate) == 10 ) {
-				$songs = Librarysong::where('created_at', '>=', $searchdate)->get();
+			if (strlen($searchstring) >= 4 && strlen($searchdate_start) == 0) {
+				$songs = Librarysong::where('filename', 'LIKE', $searchstring);
+			} else if (strlen($searchstring) == 0 && strlen($searchdate_start) == 10 ) {
+				$songs = Librarysong::where('created_at', '>=', $searchdate_start);
 			} else {
-				$songs = Librarysong::where('created_at', '>=', $searchdate)
-					->where('filename', 'LIKE', $searchstring)->get();
+				$songs = Librarysong::where('created_at', '>=', $searchdate_start)
+					->where('filename', 'LIKE', $searchstring);
 			}
+			
+			if (strlen($searchdate_end) == 10 ) {
+				$songs = $songs->where('created_at', '<=', $searchdate_end);
+			}
+			
+			$songs = $songs->get();
 			
 			$results = array();
 			
