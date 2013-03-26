@@ -55,48 +55,29 @@ class Duplicates_Controller extends Base_Controller {
 	
 	
 	
-	public function get_dup_acoustids() {
+	public function get_dupacoustids() {
 		
 		if (Request::ajax()) {
 		
 			$songs = DB::query('
-				SELECT
-					library.id,
-					library.folder,
-					library.filename,
-					library.artist,
-					library.title,
-					library_metadata.bitrate,
-					library_metadata.length,
-					library_metadata.size,
-					library_metadata.library_id,
-					library_metadata.acoustid_acoustid
-				FROM library_metadata
-				INNER JOIN (
-				    SELECT acoustid_acoustid, count(acoustid_acoustid) as duplicates
-				    FROM library_metadata
-				    GROUP BY acoustid_acoustid
-				    HAVING duplicates > 1
-    				ORDER by duplicates DESC
-				    LIMIT 100
-				) dup ON library_metadata.acoustid_acoustid = dup.acoustid_acoustid
-				LEFT JOIN library ON library_metadata.library_id=library.id
-				ORDER BY library_metadata.acoustid_acoustid
+				SELECT library.filename, library_metadata.acoustid_acoustid, count(library_metadata.acoustid_acoustid) as duplicates
+				FROM library, library_metadata
+				WHERE
+				library_metadata.library_id = library.id AND
+				library_metadata.acoustid_acoustid IS NOT NULL
+				GROUP BY library_metadata.acoustid_acoustid
+				HAVING duplicates > 1
+				ORDER by duplicates DESC
+				LIMIT 50
 			');
-			
+
 			$results = array();
 			foreach ($songs as $song) {
 				if ($song->acoustid_acoustid!="") {
-					$html_file_link = addslashes($song->folder.DS.rawurlencode($song->filename));		
 					$results[] = array(
-						'id'=>$song->id,
-						'filename'=>$song->filename,
-						'artist'=>$song->artist,
-						'title'=>$song->title,
-						'size'=>dkHelpers::format_size($song->size),
-						'playbutton'=>'<a href="'. $html_file_link .'"><i class="icon-play"></i></a>',
-						'bitrate'=>$song->bitrate,
-						'length'=>$song->length,
+						'acoustid'=>$song->acoustid_acoustid,
+						'acoustid_and_filename'=>$song->acoustid_acoustid . '<br />' . $song->filename,
+						'duplicates'=>$song->duplicates,
 					);
 				}
 			}
@@ -106,6 +87,38 @@ class Duplicates_Controller extends Base_Controller {
 		
 	}
 
+	/*
+	public function get_dupfingerprints() {
+		
+		if (Request::ajax()) {
+		
+			$songs = DB::query('
+				SELECT library.filename, library_metadata.acoustid_fingerprint, count(library_metadata.acoustid_fingerprint) as duplicates
+				FROM library, library_metadata
+				WHERE
+				library_metadata.library_id = library.id AND
+				library_metadata.acoustid_fingerprint IS NOT NULL
+				GROUP BY library_metadata.acoustid_fingerprint
+				HAVING duplicates > 1
+				ORDER by duplicates DESC
+				LIMIT 50
+			');
+
+			$results = array();
+			foreach ($songs as $song) {
+				$results[] = array(
+					'fingerprint_output'=>substr($song->acoustid_fingerprint, 0,65) . '<br />' . $song->filename,
+					'fingerprint'=>$song->acoustid_fingerprint,
+					'duplicates'=>$song->duplicates,
+				);
+			}
+			return json_encode($results);
+		
+		} 
+		
+	}
+	*/
+	
 	public function get_dup_fingerprints() {
 		
 		if (Request::ajax()) {
@@ -124,12 +137,10 @@ class Duplicates_Controller extends Base_Controller {
 					library_metadata.acoustid_fingerprint
 				FROM library_metadata
 				INNER JOIN (
-				    SELECT acoustid_fingerprint, count(acoustid_fingerprint) as duplicates
+				    SELECT acoustid_fingerprint
 				    FROM library_metadata
 				    GROUP BY acoustid_fingerprint
-				    HAVING duplicates > 1
-				    ORDER by duplicates DESC
-				    LIMIT 100
+				    HAVING count(acoustid_fingerprint) > 1
 				) dup ON library_metadata.acoustid_fingerprint = dup.acoustid_fingerprint
 				LEFT JOIN library ON library_metadata.library_id=library.id
 				ORDER BY library_metadata.acoustid_fingerprint;
@@ -140,7 +151,7 @@ class Duplicates_Controller extends Base_Controller {
 			foreach ($songs as $song) {
 				if ($song->acoustid_fingerprint!="") {
 					$html_file_link = addslashes($song->folder.DS.rawurlencode($song->filename));		
-					$results[] = array(
+						$results[] = array(
 						'id'=>$song->id,
 						'filename'=>$song->filename,
 						'artist'=>$song->artist,

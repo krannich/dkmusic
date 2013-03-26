@@ -104,6 +104,8 @@ class Library_Controller extends Base_Controller {
 			if (substr($searchstring,-1) !="%") $searchstring.="%";
 			if (substr($searchstring,0,1) == "*") $searchstring = "%".substr($searchstring,1)."%";
 
+			$searchstring = str_replace('*', '%', $searchstring);
+			
 			if (strlen($searchstring) >= 4 && strlen($searchdate) == 0) {
 				$songs = Librarysong::where('filename', 'LIKE', $searchstring)->get();
 			} else if (strlen($searchstring) == 0 && strlen($searchdate) == 10 ) {

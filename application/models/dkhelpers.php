@@ -79,7 +79,7 @@ class dkHelpers {
 			'/' => "-",
 			'\\' => "-",
 
-			"featuring" => "ft",
+			" featuring " => " ft ",
 			" feat. " => " ft ",
 			" feat " => " ft ",
 			" ft. " => " ft ",

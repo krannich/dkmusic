@@ -8,6 +8,39 @@
 
 {{HTML::script('/js/underscore.min.js')}}
 {{HTML::script('/js/backbone.min.js')}}
+<style>
+
+#results_status {
+	position: relative;
+	padding-top: 39px;
+}
+
+#results_status::after {
+	content: "Status";
+	position: absolute;
+	top: -1px;
+	left: -1px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: bold;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	color: #9da0a4;
+	-webkit-border-radius: 4px 0 4px 0;
+	-moz-border-radius: 4px 0 4px 0;
+	border-radius: 4px 0 4px 0;
+}
+
+#results_table tbody tr td:first-child {
+	text-align: center;
+}
+
+#results_table tbody tr td:first-child a {
+	text-decoration: none;
+}
+
+
+</style>
 
 <script type="text/javascript">
 function select_all() {
@@ -37,65 +70,7 @@ function delete_songs() {
 	}
 }
 
-function show_files(route, value) {
-	
-	dkbatch_data = [];
 
-	create_results_table(['' , 'Artist', 'Title', 'kbit/s', 'Length', 'Type', 'Size'], [[1,0]]);
-		
-	if (route=="acoustid") {
-		$('#results_table').before('<p><img src="/img/icon_acoustid.png" /> <span style="color:#900; font-weight: bold; line-height: 20px;vertical-align: middle;">' + value + '</span></p>');
-	} 
-
-	$('#results_table').before('<div id="results_status" class="well" style="height: 50px;overflow: auto;"></div>');
-	$('#results_table').before('<p><button class="btn" onclick="rescansongs();">Rescan ID3Tags</button></p>');
-	
-	$('#results_table').tabledata( {
-		"source"		: "/duplicates/showfiles_" + route,
-		"data"			: {"value" : value},
-		"output"		: "playbutton,artist,title,bitrate,length,type,size",
-		"dk_data"		: "id,filename",
-		"dk_options"	: {}
-	});
-	
-	$('#results_table').bind('update', function() {
-		$("#results_table tbody tr").unbind("dblclick");
-		
-		$("#results_table tbody tr").bind("click", function() {
-			var dk_data = eval('([' + $(this).attr('dk_data') + '])')[0];
-			$(this).toggleClass('selected');	
-			if ($.inArray(dk_data.id, dkbatch_data)>=0) {
-				dkbatch_data.splice( $.inArray(dk_data.id,dkbatch_data) , 1 );				
-			} else {
-				dkbatch_data.push(dk_data.id);
-			}
-		});
-				
-	});
-	
-	$('#results_table').after('<p>&nbsp;</p><p><button class="btn btn-max" onclick="select_all();">Select all songs</button></p><p><button class="btn btn-danger btn-max" onclick="delete_songs();">Delete selected songs</button></p>');	
-
-	$('#results_table').bind('update', function() {
-		$('#results_table tbody a').bind('click', function(e){
-			e.preventDefault();
-		    var song = ($(this).attr('href'));
-			$('.isPlaying').html('<img src="img/but_play.png" />');
-			if (isplaying==0 || songplaying!=song) {
-				playsong(song);
-				isplaying =1;
-				songplaying = song;
-				($(this).html('<img src="img/but_stop.png" />'));
-				($(this).addClass('isPlaying'));
-			} else {
-				$("#jquery_jplayer_1").jPlayer("stop");
-				isplaying=0;
-				songplaying = '';
-				($(this).html('<img src="img/but_play.png" />'));
-			}
-		return false;
-		});
-	});
-}
 
 
 function create_results_table(header_titles, sorting) {
@@ -137,20 +112,58 @@ function get_dupartisttitle() {
 }
 
 function get_dupacoustids() {
-	create_results_table(['acoustID' , 'Sum'], [[1,1]]);
+
+	dkbatch_data = [];
+
+	create_results_table(['', 'Artist', 'Title', 'kbit/s', 'Length', 'Size']);
+	
+	$('#results_table').before('<div id="results_status" class="well" style="height: 50px;overflow: auto;"></div>');
 
 	$('#results_table').tabledata( {
-		"source"		: "/duplicates/dupacoustids",
-		"output"		: "acoustid_and_filename,duplicates",
-		"dk_data"		: "acoustid",
+		"source"		: "/duplicates/dup_acoustids",
+		"output"		: "playbutton,artist,title,bitrate,length,size",
+		"dk_data"		: "id,filename",
 		"dk_options"	: {}
+
 	});
 	
 	$('#results_table').bind('update', function() {
-		$("#results_table tbody tr").bind("dblclick", function() {
+		$("#results_table tbody tr").unbind("dblclick");
+		
+		$("#results_table tbody tr").bind("click", function() {
 			var dk_data = eval('([' + $(this).attr('dk_data') + '])')[0];
-			show_files('acoustid', dk_data.acoustid);
-	    });
+			$(this).toggleClass('selected');	
+			if ($.inArray(dk_data.id, dkbatch_data)>=0) {
+				dkbatch_data.splice( $.inArray(dk_data.id,dkbatch_data) , 1 );				
+			} else {
+				dkbatch_data.push(dk_data.id);
+			}
+		});
+				
+	});
+	
+	$('#results_table').before('<p><button class="btn btn-danger btn-max" onclick="delete_songs();">Delete selected songs</button></p>');	
+	$('#results_table').after('<p>&nbsp;</p><p><button class="btn btn-danger btn-max" onclick="delete_songs();">Delete selected songs</button></p>');	
+
+	$('#results_table').bind('update', function() {
+		$('#results_table tbody a').bind('click', function(e){
+			e.preventDefault();
+		    var song = ($(this).attr('href'));
+			$('.isPlaying').html('<i class="icon-play"></i>');
+			if (isplaying==0 || songplaying!=song) {
+				playsong(song);
+				isplaying =1;
+				songplaying = song;
+				($(this).html('<i class="icon-stop"></i>'));
+				($(this).addClass('isPlaying'));
+			} else {
+				$("#jquery_jplayer_1").jPlayer("stop");
+				isplaying=0;
+				songplaying = '';
+				($(this).html('<i class="icon-play"></i>'));
+			}
+		return false;
+		});
 	});
 	
 }
@@ -158,25 +171,6 @@ function get_dupacoustids() {
 
 function get_dupfingerprints() {
 
-	/*
-	create_results_table(['Fingerprint' , 'Sum'],[[1,1]]);
-
-	$('#results_table').tabledata( {
-		"source"		: "/duplicates/dup_fingerprints",
-		"output"		: "fingerprint_output,duplicates",
-		"dk_data"		: "fingerprint",
-		"dk_options"	: {}
-	});
-	
-	
-	$('#results_table').bind('update', function() {
-		$("#results_table tbody tr").bind("dblclick", function() {
-			var dk_data = eval('([' + $(this).attr('dk_data') + '])')[0];
-			show_files('fingerprint', dk_data.fingerprint);
-	    });
-	});
-	*/
-	
 	dkbatch_data = [];
 
 	create_results_table(['', 'Artist', 'Title', 'kbit/s', 'Length', 'Size']);
@@ -212,25 +206,22 @@ function get_dupfingerprints() {
 		$('#results_table tbody a').bind('click', function(e){
 			e.preventDefault();
 		    var song = ($(this).attr('href'));
-			$('.isPlaying').html('<img src="img/but_play.png" />');
+			$('.isPlaying').html('<i class="icon-play"></i>');
 			if (isplaying==0 || songplaying!=song) {
 				playsong(song);
 				isplaying =1;
 				songplaying = song;
-				($(this).html('<img src="img/but_stop.png" />'));
+				($(this).html('<i class="icon-stop"></i>'));
 				($(this).addClass('isPlaying'));
 			} else {
 				$("#jquery_jplayer_1").jPlayer("stop");
 				isplaying=0;
 				songplaying = '';
-				($(this).html('<img src="img/but_play.png" />'));
+				($(this).html('<i class="icon-play"></i>'));
 			}
 		return false;
 		});
 	});
-
-
-
 	
 }
 
@@ -328,27 +319,25 @@ $(document).ready(function() {
 							<h2 class="normal">Duplicates</h2>
 						</div>
 						<div class="span9">
-							<div class="btn-group" data-toggle="buttons-radio" style="margin-top: 15px;">
-								<button type="button" class="btn getdupacoustids">Duplicate AcoustIDs</button>
-								<button type="button" class="btn getdupfingerprints">Duplicate Fingerprints</button>
-								<button type="button" class="btn getdupartisttitle">Duplicate Artist/Title</button>
-							</div>
-						</div>
-											
+						</div>											
 					</div>					
 				</div>
 			</div>
 		</div>
-
-	 
-	 
 	 
 		<div class="row">
 			<div class="span12">	        
 				<div role="main" id="main">
-					<div id="results" class="well">
-						<p><span class="label label-warning">NOTE</span> You will only see the most recent 50 results in order of decreasing frequency.<br />Double-click on a result to see which songs are involved.</p>
+					<div class="well">
+						<div class="btn-group" data-toggle="buttons-radio">
+							<button type="button" class="btn getdupacoustids">Duplicate AcoustIDs</button>
+							<button type="button" class="btn getdupfingerprints">Duplicate Fingerprints</button>
+							<button type="button" class="btn getdupartisttitle">Duplicate Artist/Title</button>
+						</div>
+						<p>&nbsp;<br /><span class="label label-warning">NOTE</span> To increase system performance, you will only see the most recent 100 results in order of decreasing frequency.</p>
+
 					</div>
+					<div id="results"></div>
 				</div>
 			</div>
 		</div>

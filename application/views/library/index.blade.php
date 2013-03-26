@@ -169,6 +169,13 @@ var page = {
 					page.collectionView.render();
 				}
 				
+				var resultscount = page.songs.length;			
+				if (resultscount > 0 ) {
+					$('#results-count').html('Results: <span class="badge">' + resultscount + '</span>');
+				} else {
+					$('#results-count').html('');
+				}
+				
 				page.loading(false);
 				page.fetchInProgress = false;
 			},
@@ -326,6 +333,7 @@ $(document).ready(function () {
 					<div class="row-fluid">
 						<div class="span3">
 							<h2 class="normal">Library</h2>
+							<div id="results-count"></div>
 						</div>
 
 						<div class="span9">
