@@ -12,7 +12,7 @@ class Create_Hash_Acoustid_Fingerprint {
 		Schema::table('hash_acoustid_fingerprint', function($table) {
 	        $table->create();
 		    $table->increments('library_id');
-		    $table->string('hash', 64);
+		    $table->string('hash', 255);
 		});
 	}
 

@@ -24,9 +24,6 @@ class Create_Library_Metadata {
 		    
    		    $table->float('acoustid_score');
 
-		    $table->timestamp('added');
-		    $table->timestamp('lastmodified');
-
 		    $table->timestamps();  
 		});
 

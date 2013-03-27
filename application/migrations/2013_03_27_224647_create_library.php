@@ -22,9 +22,6 @@ class Create_Library {
 		    $table->string('type', 10);
 		    $table->string('size', 15);
 
-		    $table->timestamp('added');
-		    $table->timestamp('lastmodified');
-
 		    $table->timestamps();  
 		});
 		
