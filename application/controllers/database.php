@@ -58,8 +58,6 @@ class Database_Controller extends Base_Controller {
 					$orig_filename = $file->filename;
 					$new_filename = dkHelpers::well_formed_artist($file->artist) . ' - ' . dkHelpers::well_formed_string($file->title) . '.mp3';
 					
-					// ID3TAGS Schreiben!!
-					
 					$orig_fullpath = dkmusic_library . $folder . DS . $orig_filename;
 					$new_fullpath = dkmusic_library . dkHelpers::get_folder_prefix($new_filename) . DS . $new_filename;
 					
