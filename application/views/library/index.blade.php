@@ -308,8 +308,7 @@ $(document).ready(function () {
    		todayHighlight: true,
    		language: 'de',
    		weekStart: 1,
-   		todayBtn: true,
-   		linked: true,
+   		todayBtn: 'linked',
 	});
 	
     $("#results").tablesorter({
