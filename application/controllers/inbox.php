@@ -4,6 +4,34 @@ class Inbox_Controller extends Base_Controller {
 
 	public $restful = true;
 
+	public function get_lala() {
+		
+		$override = 2;
+		$hash = "00025707383b0612c84522f18a34e7f54b9639a7f1a926e2e971470b74b0ba1f";
+		$song['metadata']['bitrate'] = 320;
+		
+		if ($lib_id = DB::table('hash_acoustid_fingerprint')->where('hash', '=', $hash)->first()) {
+		
+			$lib_song = Librarysong::find($lib_id->library_id);
+			$lib_song_bitrate = $lib_song->get_metadata()->bitrate;
+			
+			if ($override==1 && ($lib_song_bitrate<$song['metadata']['bitrate'])) {
+				
+				echo "Song überschreiben.";
+				
+			} else if ($override==2) {
+				
+				echo "Song hinzufügen.";
+				
+			}
+					
+		} else {
+			
+			echo "Song nicht vorhanden, kann importiert werden.";
+			
+		}
+	}
+
 	public function get_index() {
 		$inbox_count = count(dkHelpers::get_directory_content(dkmusic_inbox));
 		return View::make('inbox.index')->with('inbox_count', $inbox_count);
@@ -104,6 +132,22 @@ class Inbox_Controller extends Base_Controller {
 					$song['metadata']['acoustid_acoustid'] = $acoustid_data['acoustid'];
 					$song['metadata']['acoustid_score'] = $acoustid_data['score'];
 					
+					$hash = hash('sha256', $song['metadata']['acoustid_acoustid'] . $song['metadata']['acoustid_fingerprint']);
+
+					// HIER HINZUFÜGEN!!!
+					// HIER HINZUFÜGEN!!!
+					// HIER HINZUFÜGEN!!!
+					
+					if ($lib_id = DB::table('hash_acoustid_fingerprint')->where('hash', '=', $hash)->first()) {
+						$lib_song = Librarysong::find($lib_id->library_id);
+						$lib_song_bitrate = $lib_song->get_metadata()->bitrate;
+					}
+
+
+					// AB HIER AUSLAGERN!!!
+					// AB HIER AUSLAGERN!!!
+					// AB HIER AUSLAGERN!!!
+
 					$tagwriter = new getID3_write_id3v2;
 					$tagwriter->filename       = $fullpath;
 					$tagwriter->tagformats     = array('id3v2.3');
@@ -129,11 +173,27 @@ class Inbox_Controller extends Base_Controller {
 					$TagData['TXXX'][2]['data']  = $song['metadata']['acoustid_score'];
 								
 					$tagwriter->tag_data = $TagData;
-										
+
+
+					/* 
+					// WENN HASH VORHANDEN
+					Option 1: prüfen ob bitrate höher, wenn ja einfügen
+					Option 2: prüfen ob bitrate höher, wenn ja überschreiben
+					Option 3: Datei löschen
+					*/
+
+					/*
+					// Option 1,2					
+					$bitrate = $song['metadata']['bitrate'];
+					
+					// Bitrate des existierenden Songs ermitteln
+					// über HASH library_id bekommen und dann abfragen
+					
+					*/
+
+									
 					if ($tagwriter->WriteID3v2()) {
 						
-						$hash = hash('sha256', $song['metadata']['acoustid_acoustid'] . $song['metadata']['acoustid_fingerprint']);
-												
 						if (DB::table('hash_acoustid_fingerprint')->where('hash', '=', $hash)->count() == 0) {
 							
 							$new_librarysong_id = Librarysong::create($song);

@@ -212,7 +212,7 @@ var page = {
 	
 	deleteSong: function(id) {
 		var selected_song = page.songs.get(id);
-		bootbox.confirm("Do you really want to delete<br /><strong>" + selected_song.attributes.filename +"</strong>", function(result){
+		bootbox.confirm("<h3>Do you really want to delete this song?</h3>" + selected_song.attributes.filename +"", function(result){
 			if(result) {
 				page.deleteModel(selected_song);
 			} else {

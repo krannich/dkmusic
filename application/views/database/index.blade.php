@@ -293,7 +293,7 @@ $(document).ready(function() {
 		<div class="row">
 		
 			<div class="span3">
-				<div class="well">	
+				<div class="well" style="width: 180px;" data-spy="affix">	
 					<h2 class="normal">Database</h2>	
 					<hr />
 					<p><button class="btn btn-max scannewqueue">New songs</button></p>

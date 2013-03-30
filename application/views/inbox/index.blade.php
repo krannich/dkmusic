@@ -69,7 +69,7 @@ function do_batch(url, title) {
 	var file = dkbatch_data.shift();
 	$.ajax({
        url: url,
-       data: {"file" : file},
+       data: { "file" : file, "override": $('#override').val() },
        async: true,
        success: function(response) { 
        	    var json = JSON.parse(response);
@@ -106,7 +106,7 @@ $(document).ready(function() {
 	// Assign button actions
 
 	$("button.import").bind('click', function(e) {
-		bootbox.confirm("Do you really want to import all files?", function(result){
+		bootbox.confirm("<h3>Do you really want to import all files?</h3>", function(result){
 			if(result) {
 				$('#info_box').hide();
 				init_import_batch();
@@ -123,7 +123,7 @@ $(document).ready(function() {
 	});
 
 	$("button.convert").bind('click', function(e) {
-		bootbox.confirm("Do you really want to convert all files?", function(result){
+		bootbox.confirm("<h3>Do you really want to convert all files?</h3>", function(result){
 			if(result) {
 				$('#info_box').hide();
 				init_convert_batch();
@@ -141,7 +141,7 @@ $(document).ready(function() {
 
 
 	$("button.emptytrash").bind('click', function(e) {
-		bootbox.confirm("Do you really want to empty the trash?", function(result){
+		bootbox.confirm("<h3>Do you really want to empty the trash?</h3>", function(result){
 			if(result) {
 				location.href = "/inbox/emptytrash";
 			} else {
@@ -167,16 +167,21 @@ $(document).ready(function() {
 		
 			<div class="span3">
 				
-				<div class="well">
+				<div class="well" style="width: 180px;" data-spy="affix">
 					<div id="inboxinfoview"></div>
 
 					<hr />
-					
+
 					<p><button class="btn btn-max import"><i class="icon-cloud-upload"></i> Import files</button></p>
+					<select name="override" id="override" style="width: 100%; margin-bottom: 0;">
+						<option value="0">Don't import existing file(s)</option>
+						<option value="1">Override existing file(s)</option>
+						<option value="2" selected>Additionally add file(s)</option>
+					</select>
+					
 					<hr />
 					<p><button class="btn btn-max convert"><i class="icon-music"></i> Convert to mp3</button></p>
 					<p><button class="btn btn-danger btn-max emptytrash"><i class="icon-trash"></i> Empty trash</button></p>
-
 				</div>
 			</div>
 			
@@ -186,11 +191,12 @@ $(document).ready(function() {
 					<div id="info_box" class="well">
 						<h2 class="normal">How does it work?</h2>
 						<p>Your music files will be organized in the corresponding folders (#, A-Z) of your music library.<br />
-							Duplicates will be removed according to their acoustid and audio fingerprint<br />
-							For more information about acoustid and audio fingerprints visit www.acoustid.org.
+							Duplicates will be removed according to their acoustid and audio fingerprint.</p>
+						<p>You can specify, if you want to additionally add (default) or override songs that have a higher bitrate,<br />or if you want to delete songs that already exist in your database regardless a better bitrate (not recommended).</p>
+						<p><span class="label label-warning">Note</span> For more information about acoustid and audio fingerprints visit www.acoustid.org.
 						</p>
 
-						<p>The following steps are performed:</p>
+						<p><strong>On import the following steps are performed:</strong></p>
 						<ul>
 							<li>Remove punctuation marks, apostrophes, curly and square brackets from artist and title</li>
 							<li>Remove "The" and "Die" from beginning of artist</li>

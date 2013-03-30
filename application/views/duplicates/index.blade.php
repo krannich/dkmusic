@@ -10,27 +10,6 @@
 {{HTML::script('/js/backbone.min.js')}}
 <style>
 
-#results_status {
-	position: relative;
-	padding-top: 39px;
-}
-
-#results_status::after {
-	content: "Status";
-	position: absolute;
-	top: -1px;
-	left: -1px;
-	padding: 3px 7px;
-	font-size: 12px;
-	font-weight: bold;
-	background-color: #fff;
-	border: 1px solid #ddd;
-	color: #9da0a4;
-	-webkit-border-radius: 4px 0 4px 0;
-	-moz-border-radius: 4px 0 4px 0;
-	border-radius: 4px 0 4px 0;
-}
-
 #results_table tbody tr td:first-child {
 	text-align: center;
 }
@@ -39,6 +18,10 @@
 	text-decoration: none;
 }
 
+#results_table > thead > tr > th:first-child > div::before {
+	content:'';
+	margin: 0;
+}
 
 </style>
 
@@ -57,9 +40,9 @@ function select_all() {
 
 function delete_songs() {
 	if ($('#results_table > tbody > tr').length == dkbatch_data.length) {
-		bootbox.alert("You cannot delete all songs?");
+		bootbox.alert("<h3>You cannot delete all songs?</h3>");
 	} else {
-		bootbox.confirm("Do you really want to delete all selected files?", function(result){
+		bootbox.confirm("<h3>Really delete all selected files?</h3>", function(result){
 			if(result) {
 				$("#results_table > tbody > tr.selected").remove();
 				do_batch('/duplicates/remove');
@@ -69,8 +52,6 @@ function delete_songs() {
 		});
 	}
 }
-
-
 
 
 function create_results_table(header_titles, sorting) {

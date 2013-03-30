@@ -83,7 +83,6 @@
         background-color: #fff;
         
     }
-
         
     </style>
     
@@ -93,10 +92,9 @@
 			$(document).ready(function () {
 			
 				$.pnotify({
-			    	text: '<strong>Music libarary not found.</strong><br>dkmusic may not work correctly. Please double-check if your hard disk is attached.',
+			    	text: '<strong>Music libarary not found.</strong><br/>dkmusic may not work correctly. Please double-check if your hard disk is attached.',
 			    	type: 'error',
-			    	addclass: "stack-bar-top",
-			    	width: "100%",
+			    	//addclass: "stack-bar-top",
 			    	hide: false,
 			    });
 			

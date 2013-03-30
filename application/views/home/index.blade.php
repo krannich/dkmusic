@@ -22,7 +22,7 @@ $(document).ready(function () {
 	 <div class="container">
 		<div class="row">
 			<div class="span3">
-				<div class="well">		
+				<div class="well" style="width: 180px;" data-spy="affix">	
 					<h2 class="normal">Library</h2>
 					<table style="width: 100%">
 						<tr>

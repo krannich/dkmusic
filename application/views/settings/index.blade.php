@@ -124,7 +124,7 @@
 			</div>
 
 			<div class="form-actions">
-				<a href="settings/create_directories" class="btn btn-large btn-primary">Create missing directories</a>
+				<a href="settings/create_directories" class="btn btn-primary">Create missing directories</a>
 			</div>
 
 		</fieldset>
