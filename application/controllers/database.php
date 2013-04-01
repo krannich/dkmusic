@@ -77,7 +77,6 @@ class Database_Controller extends Base_Controller {
 						$results[] = '<p><span class="label label-warning">ERROR</span> File does not exist.<br />' . $return_filename . '</p>';						
 					}
 					
-					
 				}				
 				
 			}

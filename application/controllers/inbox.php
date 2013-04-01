@@ -90,6 +90,7 @@ class Inbox_Controller extends Base_Controller {
 			$response = array();
 
 			$file = Input::get('file');
+			$override = Input::get('override');
 				
 		    $getid3 = new getID3;	
 		    $getid3->encoding = 'UTF-8';
@@ -134,96 +135,82 @@ class Inbox_Controller extends Base_Controller {
 					
 					$hash = hash('sha256', $song['metadata']['acoustid_acoustid'] . $song['metadata']['acoustid_fingerprint']);
 
-					// HIER HINZUFÜGEN!!!
-					// HIER HINZUFÜGEN!!!
-					// HIER HINZUFÜGEN!!!
-					
-					if ($lib_id = DB::table('hash_acoustid_fingerprint')->where('hash', '=', $hash)->first()) {
-						$lib_song = Librarysong::find($lib_id->library_id);
-						$lib_song_bitrate = $lib_song->get_metadata()->bitrate;
-					}
 
-
-					// AB HIER AUSLAGERN!!!
-					// AB HIER AUSLAGERN!!!
-					// AB HIER AUSLAGERN!!!
-
-					$tagwriter = new getID3_write_id3v2;
-					$tagwriter->filename       = $fullpath;
-					$tagwriter->tagformats     = array('id3v2.3');
-					$tagwriter->merge_existing_data = false;
-					$tagwriter->overwrite_tags = true;
-					$tagwriter->tag_encoding   = "UTF-8";
-					$tagwriter->remove_other_tags = true;
-					
-					$TagData['TPE1'][0]['data']  = $song['artist'];
-					$TagData['TIT2'][0]['data']  = $song['title'];
-					
-					$TagData['TCON'][0]['data']  = $song['metadata']['genre'];
-					$TagData['TYER'][0]['data']  = $song['metadata']['year'];
-					$TagData['TBPM'][0]['data']  = $song['metadata']['bpm'];
-					
-					$TagData['TXXX'][0]['description']  = 'Acoustid Id';
-					$TagData['TXXX'][0]['data']  = $song['metadata']['acoustid_acoustid'];
+					if (Song::write_mp3tags($fullpath, $song)) {
 			
-					$TagData['TXXX'][1]['description']  = 'Acoustid Fingerprint';
-					$TagData['TXXX'][1]['data']  = $song['metadata']['acoustid_fingerprint'];
-
-					$TagData['TXXX'][2]['description']  = 'Acoustid Score';
-					$TagData['TXXX'][2]['data']  = $song['metadata']['acoustid_score'];
-								
-					$tagwriter->tag_data = $TagData;
-
-
-					/* 
-					// WENN HASH VORHANDEN
-					Option 1: prüfen ob bitrate höher, wenn ja einfügen
-					Option 2: prüfen ob bitrate höher, wenn ja überschreiben
-					Option 3: Datei löschen
-					*/
-
-					/*
-					// Option 1,2					
-					$bitrate = $song['metadata']['bitrate'];
-					
-					// Bitrate des existierenden Songs ermitteln
-					// über HASH library_id bekommen und dann abfragen
-					
-					*/
-
-									
-					if ($tagwriter->WriteID3v2()) {
+						if ($lib_id = DB::table('hash_acoustid_fingerprint')->where('hash', '=', $hash)->first()) {
 						
-						if (DB::table('hash_acoustid_fingerprint')->where('hash', '=', $hash)->count() == 0) {
+							$lib_song = Librarysong::find($lib_id->library_id);
+							$lib_song_bitrate = $lib_song->get_metadata()->bitrate;
+							
+							if ($override==1 && ($lib_song_bitrate<=$song['metadata']['bitrate'])) {
+								/*
+								dkHelpers::move_file(
+									dkmusic_library . $lib_song->folder . DS . $lib_song->filename,
+									dkmusic_trash . $lib_song->filename
+								);
+								
+								$new_filename = $song['artist'] . ' - ' . $song['title'] . '.mp3';
+								$new_filename = dkHelpers::move_file( $fullpath, dkmusic_library . dkHelpers::get_folder_prefix($new_filename) . DS . $new_filename );
+								$song['filename'] = $new_filename;
+								$song['folder'] = dkHelpers::get_folder_prefix($new_filename);
+								$lib_song->fill($song);
+								$lib_song->save();
+								
+								$response = array (
+									'code' => 1,
+									'text' => '<p><span class="label label-success">OVERRIDE</span> ' . $new_filename . ' (<b>DB: ' . $lib_song_bitrate . '</b>/' . $song['metadata']['bitrate'] . 'kbit/s)</p>'
+								);
+								*/
+								
+								$response = array (
+									'code' => 1,
+									'text' => '<p><span class="label label-warning">ERROR</span> NOT IMPLEMENTED YET</p>'
+								);
+
+								
+							} else if ($override == 2 && ($lib_song_bitrate < $song['metadata']['bitrate'])) {
+
+								$new_filename = $song['artist'] . ' - ' . $song['title'] . '.mp3';
+								$new_filename = dkHelpers::move_file( $fullpath, dkmusic_library . dkHelpers::get_folder_prefix($new_filename) . DS . $new_filename );
+								$song['filename'] = $new_filename;
+								$song['folder'] = dkHelpers::get_folder_prefix($new_filename);
+								
+								$new_librarysong_id = Librarysong::create($song);
+								DB::table('hash_acoustid_fingerprint')->insert(array('library_id' => $new_librarysong_id, 'hash' => $hash));
+							
+								$response = array (
+									'code' => 1,
+									'text' => '<p><span class="label label-success">ADDED</span> ' . $new_filename . ' (<b>DB: ' . $lib_song_bitrate . '</b>/' . $song['metadata']['bitrate'] . 'kbit/s)</p>'
+								);
+								
+							} else {
+							
+								dkHelpers::move_file( $fullpath, dkmusic_output_duplicates . $song['filename'] );
+								$response = array (
+									'code' => 4,
+									'text' => '<p><span class="label label-important">DUPLICATE</span> ' . $song['filename'] . '</p>'
+								);
+							}
+									
+						} else {
+							
+							$new_filename = $song['artist'] . ' - ' . $song['title'] . '.mp3';
+							$new_filename = dkHelpers::move_file( $fullpath, dkmusic_library . dkHelpers::get_folder_prefix($new_filename) . DS . $new_filename );
+							$song['filename'] = $new_filename;
+							$song['folder'] = dkHelpers::get_folder_prefix($new_filename);
 							
 							$new_librarysong_id = Librarysong::create($song);
 							DB::table('hash_acoustid_fingerprint')->insert(array('library_id' => $new_librarysong_id, 'hash' => $hash));
-							
-							$new_song = Librarysong::find($new_librarysong_id);
-
-							$new_artist = dkHelpers::remove_bad_characters($song['artist']);
-							$new_title = dkHelpers::remove_bad_characters($song['title']);
-
-							$new_filename = $new_artist . ' - ' . $new_title . '.mp3';
-							$new_filename = dkHelpers::move_file( $fullpath, dkmusic_library . dkHelpers::get_folder_prefix($new_filename) . DS . $new_filename );
-							
-							$new_song->filename = $new_filename;
-							$new_song->folder = dkHelpers::get_folder_prefix($new_filename);
-							$new_song->save();
 							
 							$response = array (
 								'code' => 1,
 								'text' => '<p><span class="label label-success">IMPORTED</span> ' . $new_filename .'</p>'
 							);
 							
-						} else {
-							dkHelpers::move_file( $fullpath, dkmusic_output_duplicates . $song['filename'] );
-							$response = array (
-								'code' => 4,
-								'text' => '<p><span class="label label-important">DUPLICATE</span> ' . $song['filename'] . '</p>'
-							);
 							
 						}
+
 		
 					} else {
 					

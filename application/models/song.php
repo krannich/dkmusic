@@ -58,5 +58,47 @@ class Song extends Eloquent {
 		$song_metadata = DB::table(static::$table.'_metadata')->where(static::$table.'_id', '=', $this->id)->first();
 		return $song_metadata;
 	}
+	
+	public static function write_mp3tags($fullpath, $song) {
+		$getid3 = new getID3;	
+	    $getid3->encoding = 'UTF-8';
+		$getid3->option_tag_id3v1         	= false;              
+	    $getid3->option_tag_lyrics3       	= false;              
+	    $getid3->option_tag_apetag        	= false;              
+	    $getid3->option_accurate_results  	= false;             
+	    $getid3->option_tags_images       	= false;
+	    $getid3->option_md5_data			= false;	
+	    $getid3->option_md5_data_source		= false;
+	    $getid3->option_tags_html 			= false; 
+	    
+	    $tagwriter = new getID3_write_id3v2;
+		$tagwriter->filename       = $fullpath;
+		$tagwriter->tagformats     = array('id3v2.3');
+		$tagwriter->merge_existing_data = false;
+		$tagwriter->overwrite_tags = true;
+		$tagwriter->tag_encoding   = "UTF-8";
+		$tagwriter->remove_other_tags = true;
+		
+		$TagData['TPE1'][0]['data']  = $song['artist'];
+		$TagData['TIT2'][0]['data']  = $song['title'];
+		
+		$TagData['TCON'][0]['data']  = $song['metadata']['genre'];
+		$TagData['TYER'][0]['data']  = $song['metadata']['year'];
+		$TagData['TBPM'][0]['data']  = $song['metadata']['bpm'];
+		
+		$TagData['TXXX'][0]['description']  = 'Acoustid Id';
+		$TagData['TXXX'][0]['data']  = $song['metadata']['acoustid_acoustid'];
+	
+		$TagData['TXXX'][1]['description']  = 'Acoustid Fingerprint';
+		$TagData['TXXX'][1]['data']  = $song['metadata']['acoustid_fingerprint'];
+	
+		$TagData['TXXX'][2]['description']  = 'Acoustid Score';
+		$TagData['TXXX'][2]['data']  = $song['metadata']['acoustid_score'];
+					
+		$tagwriter->tag_data = $TagData;
+		
+		return $tagwriter->WriteID3v2();
+		
+	}
 
 }

@@ -138,12 +138,22 @@ class dkHelpers {
 		return strtr( $string, $replace_characters );
 	}
 
+
+	// DEPRICATED !!!!
+	// DEPRICATED !!!!
+	// DEPRICATED !!!!
+	// DEPRICATED !!!!
+	// DEPRICATED !!!!
 	public static function remove_bad_characters($string) {
 		$replace_characters = array(
 			"/" => " - ",
 		);
 		return strtr( $string, $replace_characters );
 	}
+	// DEPRICATED !!!!
+	// DEPRICATED !!!!
+	// DEPRICATED !!!!
+	// DEPRICATED !!!!
 
 
 	/*
