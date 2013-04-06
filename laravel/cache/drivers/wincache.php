@@ -1,23 +1,23 @@
 <?php namespace Laravel\Cache\Drivers;
 
-class Redis extends Driver {
+class WinCache extends Driver {
 
 	/**
-	 * The Redis database instance.
+	 * The cache key from the cache configuration file.
 	 *
-	 * @var Laravel\Redis
+	 * @var string
 	 */
-	protected $redis;
+	protected $key;
 
 	/**
-	 * Create a new Redis cache driver instance.
+	 * Create a new WinCache cache driver instance.
 	 *
-	 * @param  Laravel\Redis  $redis
+	 * @param  string  $key
 	 * @return void
 	 */
-	public function __construct(\Laravel\Redis $redis)
+	public function __construct($key)
 	{
-		$this->redis = $redis;
+		$this->key = $key;
 	}
 
 	/**
@@ -28,7 +28,7 @@ class Redis extends Driver {
 	 */
 	public function has($key)
 	{
-		return ( ! is_null($this->redis->get($key)));
+		return ( ! is_null($this->get($key)));
 	}
 
 	/**
@@ -39,9 +39,9 @@ class Redis extends Driver {
 	 */
 	protected function retrieve($key)
 	{
-		if ( ! is_null($cache = $this->redis->get($key)))
+		if (($cache = wincache_ucache_get($this->key.$key)) !== false)
 		{
-			return unserialize($cache);
+			return $cache;
 		}
 	}
 
@@ -60,9 +60,7 @@ class Redis extends Driver {
 	 */
 	public function put($key, $value, $minutes)
 	{
-		$this->forever($key, $value);
-
-		$this->redis->expire($key, $minutes * 60);
+		wincache_ucache_add($this->key.$key, $value, $minutes * 60);
 	}
 
 	/**
@@ -74,7 +72,7 @@ class Redis extends Driver {
 	 */
 	public function forever($key, $value)
 	{
-		$this->redis->set($key, serialize($value));
+		return $this->put($key, $value, 0);
 	}
 
 	/**
@@ -85,17 +83,7 @@ class Redis extends Driver {
 	 */
 	public function forget($key)
 	{
-		$this->redis->del($key);
-	}
-
-	/**
-	 * Flush the entire cache.
-	 *
-	 * @return void
-	 */
-	public function flush()
-	{
-		$this->redis->flushdb();
+		wincache_ucache_delete($this->key.$key);
 	}
 
 }
