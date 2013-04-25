@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class FileBag extends ParameterBag
 {
-    private static $fileKeys = array('error', 'name', 'size', 'tmp_name', 'type');
+    static private $fileKeys = array('error', 'name', 'size', 'tmp_name', 'type');
 
     /**
      * Constructor.
@@ -38,7 +38,8 @@ class FileBag extends ParameterBag
     }
 
     /**
-     * {@inheritdoc}
+     * (non-PHPdoc)
+     * @see Symfony\Component\HttpFoundation\ParameterBag::replace()
      *
      * @api
      */
@@ -49,21 +50,23 @@ class FileBag extends ParameterBag
     }
 
     /**
-     * {@inheritdoc}
+     * (non-PHPdoc)
+     * @see Symfony\Component\HttpFoundation\ParameterBag::set()
      *
      * @api
      */
     public function set($key, $value)
     {
-        if (!is_array($value) && !$value instanceof UploadedFile) {
+        if (is_array($value) || $value instanceof UploadedFile) {
+            parent::set($key, $this->convertFileInformation($value));
+        } else {
             throw new \InvalidArgumentException('An uploaded file must be an array or an instance of UploadedFile.');
         }
-
-        parent::set($key, $this->convertFileInformation($value));
     }
 
     /**
-     * {@inheritdoc}
+     * (non-PHPdoc)
+     * @see Symfony\Component\HttpFoundation\ParameterBag::add()
      *
      * @api
      */
@@ -77,7 +80,7 @@ class FileBag extends ParameterBag
     /**
      * Converts uploaded files to UploadedFile instances.
      *
-     * @param array|UploadedFile $file A (multi-dimensional) array of uploaded file information
+     * @param  array|UploadedFile $file A (multi-dimensional) array of uploaded file information
      *
      * @return array A (multi-dimensional) array of UploadedFile instances
      */
@@ -118,7 +121,7 @@ class FileBag extends ParameterBag
      * It's safe to pass an already converted array, in which case this method
      * just returns the original array unmodified.
      *
-     * @param array $data
+     * @param  array $data
      *
      * @return array
      */

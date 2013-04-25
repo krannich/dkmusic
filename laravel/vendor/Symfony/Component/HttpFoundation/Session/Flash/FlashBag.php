@@ -16,7 +16,7 @@ namespace Symfony\Component\HttpFoundation\Session\Flash;
  *
  * @author Drak <drak@zikula.org>
  */
-class FlashBag implements FlashBagInterface, \IteratorAggregate, \Countable
+class FlashBag implements FlashBagInterface
 {
     private $name = 'flashes';
 
@@ -68,15 +68,7 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate, \Countable
     /**
      * {@inheritdoc}
      */
-    public function add($type, $message)
-    {
-        $this->flashes[$type][] = $message;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function peek($type, array $default =array())
+    public function peek($type, $default = null)
     {
         return $this->has($type) ? $this->flashes[$type] : $default;
     }
@@ -92,7 +84,7 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate, \Countable
     /**
      * {@inheritdoc}
      */
-    public function get($type, array $default = array())
+    public function get($type, $default = null)
     {
         if (!$this->has($type)) {
             return $default;
@@ -119,9 +111,9 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate, \Countable
     /**
      * {@inheritdoc}
      */
-    public function set($type, $messages)
+    public function set($type, $message)
     {
-        $this->flashes[$type] = (array) $messages;
+        $this->flashes[$type] = $message;
     }
 
     /**
@@ -137,7 +129,7 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate, \Countable
      */
     public function has($type)
     {
-        return array_key_exists($type, $this->flashes) && $this->flashes[$type];
+        return array_key_exists($type, $this->flashes);
     }
 
     /**
@@ -162,25 +154,5 @@ class FlashBag implements FlashBagInterface, \IteratorAggregate, \Countable
     public function clear()
     {
         return $this->all();
-    }
-
-    /**
-     * Returns an iterator for flashes.
-     *
-     * @return \ArrayIterator An \ArrayIterator instance
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->all());
-    }
-
-    /**
-     * Returns the number of flashes.
-     *
-     * @return int The number of flashes
-     */
-    public function count()
-    {
-        return count($this->flashes);
     }
 }

@@ -75,7 +75,7 @@ class Validator {
 	/**
 	 * Create a new validator instance.
 	 *
-	 * @param  mixed  $attributes
+	 * @param  array  $attributes
 	 * @param  array  $rules
 	 * @param  array  $messages
 	 * @return void
@@ -89,7 +89,7 @@ class Validator {
 
 		$this->rules = $rules;
 		$this->messages = $messages;
-		$this->attributes = (is_object($attributes)) ? get_object_vars($attributes) : $attributes;
+		$this->attributes = $attributes;
 	}
 
 	/**
@@ -269,9 +269,8 @@ class Validator {
 	protected function validate_required_with($attribute, $value, $parameters)
 	{
 		$other = $parameters[0];
-		$other_value = array_get($this->attributes, $other);		
 
-		if ($this->validate_required($other, $other_value))
+		if ($this->validate_required($other, $this->attributes[$other]))
 		{
 			return $this->validate_required($attribute, $value);
 		}
@@ -302,7 +301,7 @@ class Validator {
 	 */
 	protected function validate_accepted($attribute, $value)
 	{
-		return $this->validate_required($attribute, $value) and ($value == 'yes' or $value == '1' or $value == 'on');
+		return $this->validate_required($attribute, $value) and ($value == 'yes' or $value == '1');
 	}
 
 	/**
@@ -317,7 +316,7 @@ class Validator {
 	{
 		$other = $parameters[0];
 
-		return array_key_exists($other, $this->attributes) and $value == $this->attributes[$other];
+		return isset($this->attributes[$other]) and $value == $this->attributes[$other];
 	}
 
 	/**
@@ -332,7 +331,7 @@ class Validator {
 	{
 		$other = $parameters[0];
 
-		return array_key_exists($other, $this->attributes) and $value != $this->attributes[$other];
+		return isset($this->attributes[$other]) and $value != $this->attributes[$other];
 	}
 
 	/**
@@ -760,19 +759,6 @@ class Validator {
 	}
 
 	/**
-	 * Validate the date conforms to a given format.
-	 * 
-	 * @param  string  $attribute
-	 * @param  mixed   $value
-	 * @param  array   $parameters
-	 * @return bool
-	 */
-	protected function validate_date_format($attribute, $value, $parameters)
-	{
-		return date_create_from_format($parameters[0], $value) !== false;
-	}
-
-	/**
 	 * Get the proper error message for an attribute and rule.
 	 *
 	 * @param  string  $attribute
@@ -875,20 +861,6 @@ class Validator {
 		}
 
 		return $message;
-	}
-
-	/**
-	 * Replace all place-holders for the required_with rule.
-	 *
-	 * @param  string  $message
-	 * @param  string  $attribute
-	 * @param  string  $rule
-	 * @param  array   $parameters
-	 * @return string
-	 */
-	protected function replace_required_with($message, $attribute, $rule, $parameters)
-	{
-		return str_replace(':field', $this->attribute($parameters[0]), $message);
 	}
 
 	/**
@@ -1000,7 +972,7 @@ class Validator {
 	 */
 	protected function replace_same($message, $attribute, $rule, $parameters)
 	{
-		return str_replace(':other', $this->attribute($parameters[0]), $message);
+		return str_replace(':other', $parameters[0], $message);
 	}
 
 	/**
@@ -1014,7 +986,7 @@ class Validator {
 	 */
 	protected function replace_different($message, $attribute, $rule, $parameters)
 	{
-		return str_replace(':other', $this->attribute($parameters[0]), $message);
+		return str_replace(':other', $parameters[0], $message);
 	}
 
 	/**

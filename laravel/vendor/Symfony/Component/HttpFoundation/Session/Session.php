@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
  *
  * @api
  */
-class Session implements SessionInterface, \IteratorAggregate, \Countable
+class Session implements SessionInterface
 {
     /**
      * Storage driver.
@@ -57,13 +57,13 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     {
         $this->storage = $storage ?: new NativeSessionStorage();
 
-        $attributes = $attributes ?: new AttributeBag();
-        $this->attributeName = $attributes->getName();
-        $this->registerBag($attributes);
+        $attributeBag = $attributes ?: new AttributeBag();
+        $this->attributeName = $attributeBag->getName();
+        $this->registerBag($attributeBag);
 
-        $flashes = $flashes ?: new FlashBag();
-        $this->flashName = $flashes->getName();
-        $this->registerBag($flashes);
+        $flashBag = $flashes ?: new FlashBag();
+        $this->flashName = $flashBag->getName();
+        $this->registerBag($flashBag);
     }
 
     /**
@@ -133,47 +133,19 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     /**
      * {@inheritdoc}
      */
-    public function isStarted()
-    {
-        return $this->storage->isStarted();
-    }
-
-    /**
-     * Returns an iterator for attributes.
-     *
-     * @return \ArrayIterator An \ArrayIterator instance
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->storage->getBag($this->attributeName)->all());
-    }
-
-    /**
-     * Returns the number of attributes.
-     *
-     * @return int The number of attributes
-     */
-    public function count()
-    {
-        return count($this->storage->getBag($this->attributeName)->all());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function invalidate($lifetime = null)
+    public function invalidate()
     {
         $this->storage->clear();
 
-        return $this->migrate(true, $lifetime);
+        return $this->storage->regenerate(true);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function migrate($destroy = false, $lifetime = null)
+    public function migrate($destroy = false)
     {
-        return $this->storage->regenerate($destroy, $lifetime);
+        return $this->storage->regenerate($destroy);
     }
 
     /**
@@ -217,15 +189,9 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getMetadataBag()
-    {
-        return $this->storage->getMetadataBag();
-    }
-
-    /**
-     * {@inheritdoc}
+     * Registers a SessionBagInterface with the session.
+     *
+     * @param SessionBagInterface $bag
      */
     public function registerBag(SessionBagInterface $bag)
     {
@@ -233,7 +199,11 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
     }
 
     /**
-     * {@inheritdoc}
+     * Get's a bag instance.
+     *
+     * @param string $name
+     *
+     * @return SessionBagInterface
      */
     public function getBag($name)
     {
@@ -259,20 +229,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      */
     public function getFlashes()
     {
-        $all = $this->getBag($this->flashName)->all();
-
-        $return = array();
-        if ($all) {
-            foreach ($all as $name => $array) {
-                if (is_numeric(key($array))) {
-                    $return[$name] = reset($array);
-                } else {
-                    $return[$name] = $array;
-                }
-            }
-        }
-
-        return $return;
+        return $this->getBag('flashes')->all();
     }
 
     /**
@@ -282,9 +239,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      */
     public function setFlashes($values)
     {
-        foreach ($values as $name => $value) {
-            $this->getBag($this->flashName)->set($name, $value);
-        }
+       $this->getBag('flashes')->setAll($values);
     }
 
     /**
@@ -297,9 +252,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      */
     public function getFlash($name, $default = null)
     {
-        $return = $this->getBag($this->flashName)->get($name);
-
-        return empty($return) ? $default : reset($return);
+       return $this->getBag('flashes')->get($name, $default);
     }
 
     /**
@@ -310,7 +263,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      */
     public function setFlash($name, $value)
     {
-        $this->getBag($this->flashName)->set($name, $value);
+       $this->getBag('flashes')->set($name, $value);
     }
 
     /**
@@ -322,7 +275,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      */
     public function hasFlash($name)
     {
-        return $this->getBag($this->flashName)->has($name);
+       return $this->getBag('flashes')->has($name);
     }
 
     /**
@@ -332,7 +285,7 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      */
     public function removeFlash($name)
     {
-        $this->getBag($this->flashName)->get($name);
+       $this->getBag('flashes')->get($name);
     }
 
     /**
@@ -342,6 +295,6 @@ class Session implements SessionInterface, \IteratorAggregate, \Countable
      */
     public function clearFlashes()
     {
-        return $this->getBag($this->flashName)->clear();
+       return $this->getBag('flashes')->clear();
     }
 }

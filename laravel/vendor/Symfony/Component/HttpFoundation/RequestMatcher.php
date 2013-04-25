@@ -31,9 +31,9 @@ class RequestMatcher implements RequestMatcherInterface
     private $host;
 
     /**
-     * @var array
+     * @var string
      */
-    private $methods = array();
+    private $methods;
 
     /**
      * @var string
@@ -41,26 +41,19 @@ class RequestMatcher implements RequestMatcherInterface
     private $ip;
 
     /**
+     * Attributes.
+     *
      * @var array
      */
-    private $attributes = array();
+    private $attributes;
 
-    /**
-     * @param string|null          $path
-     * @param string|null          $host
-     * @param string|string[]|null $methods
-     * @param string|null          $ip
-     * @param array                $attributes
-     */
     public function __construct($path = null, $host = null, $methods = null, $ip = null, array $attributes = array())
     {
-        $this->matchPath($path);
-        $this->matchHost($host);
-        $this->matchMethod($methods);
-        $this->matchIp($ip);
-        foreach ($attributes as $k => $v) {
-            $this->matchAttribute($k, $v);
-        }
+        $this->path = $path;
+        $this->host = $host;
+        $this->methods = $methods;
+        $this->ip = $ip;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -96,11 +89,11 @@ class RequestMatcher implements RequestMatcherInterface
     /**
      * Adds a check for the HTTP method.
      *
-     * @param string|string[]|null $method An HTTP method or an array of HTTP methods
+     * @param string|array $method An HTTP method or an array of HTTP methods
      */
     public function matchMethod($method)
     {
-        $this->methods = array_map('strtoupper', (array) $method);
+        $this->methods = array_map('strtoupper', is_array($method) ? $method : array($method));
     }
 
     /**
@@ -121,7 +114,7 @@ class RequestMatcher implements RequestMatcherInterface
      */
     public function matches(Request $request)
     {
-        if ($this->methods && !in_array($request->getMethod(), $this->methods)) {
+        if (null !== $this->methods && !in_array($request->getMethod(), $this->methods)) {
             return false;
         }
 
@@ -134,12 +127,12 @@ class RequestMatcher implements RequestMatcherInterface
         if (null !== $this->path) {
             $path = str_replace('#', '\\#', $this->path);
 
-            if (!preg_match('#'.$path.'#', rawurldecode($request->getPathInfo()))) {
+            if (!preg_match('#'.$path.'#', $request->getPathInfo())) {
                 return false;
             }
         }
 
-        if (null !== $this->host && !preg_match('#'.str_replace('#', '\\#', $this->host).'#i', $request->getHost())) {
+        if (null !== $this->host && !preg_match('#'.str_replace('#', '\\#', $this->host).'#', $request->getHost())) {
             return false;
         }
 
@@ -205,20 +198,11 @@ class RequestMatcher implements RequestMatcherInterface
      */
     protected function checkIp6($requestIp, $ip)
     {
-        if (!((extension_loaded('sockets') && defined('AF_INET6')) || @inet_pton('::1'))) {
+        if (!defined('AF_INET6')) {
             throw new \RuntimeException('Unable to check Ipv6. Check that PHP was not compiled with option "disable-ipv6".');
         }
 
-        if (false !== strpos($ip, '/')) {
-            list($address, $netmask) = explode('/', $ip, 2);
-
-            if ($netmask < 1 || $netmask > 128) {
-                return false;
-            }
-        } else {
-            $address = $ip;
-            $netmask = 128;
-        }
+        list($address, $netmask) = explode('/', $ip, 2);
 
         $bytesAddr = unpack("n*", inet_pton($address));
         $bytesTest = unpack("n*", inet_pton($requestIp));

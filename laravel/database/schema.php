@@ -1,6 +1,5 @@
 <?php namespace Laravel\Database;
 
-use Closure;
 use Laravel\Fluent;
 use Laravel\Database as DB;
 

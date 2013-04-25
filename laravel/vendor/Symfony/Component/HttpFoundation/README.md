@@ -38,9 +38,10 @@ If you are using PHP 5.3.x you must add the following to your autoloader:
         $loader->registerPrefixFallback(__DIR__.'/../vendor/symfony/src/Symfony/Component/HttpFoundation/Resources/stubs');
     }
 
+
 Resources
 ---------
 
-You can run the unit tests with the following command:
+Unit tests:
 
-    phpunit
+https://github.com/symfony/symfony/tree/master/tests/Symfony/Tests/Component/HttpFoundation

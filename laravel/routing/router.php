@@ -33,7 +33,6 @@ class Router {
 		'DELETE' => array(),
 		'PATCH'  => array(),
 		'HEAD'   => array(),
-		'OPTIONS'=> array(),
 	);
 
 	/**
@@ -48,7 +47,6 @@ class Router {
 		'DELETE' => array(),
 		'PATCH'  => array(),
 		'HEAD'   => array(),
-		'OPTIONS'=> array(),
 	);
 
 	/**
@@ -78,7 +76,6 @@ class Router {
 	public static $patterns = array(
 		'(:num)' => '([0-9]+)',
 		'(:any)' => '([a-zA-Z0-9\.\-_%=]+)',
-		'(:segment)' => '([^/]+)',
 		'(:all)' => '(.*)',
 	);
 
@@ -90,7 +87,6 @@ class Router {
 	public static $optional = array(
 		'/(:num?)' => '(?:/([0-9]+)',
 		'/(:any?)' => '(?:/([a-zA-Z0-9\.\-_%=]+)',
-		'/(:segment?)' => '(?:/([^/]+)',
 		'/(:all?)' => '(?:/(.*)',
 	);
 
@@ -99,7 +95,7 @@ class Router {
 	 *
 	 * @var array
 	 */
-	public static $methods = array('GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS');
+	public static $methods = array('GET', 'POST', 'PUT', 'DELETE', 'HEAD');
 
 	/**
 	 * Register a HTTPS route with the router.
@@ -498,7 +494,7 @@ class Router {
 			// we just did before we started searching.
 			if (str_contains($route, '('))
 			{
-				$pattern = '#^'.static::wildcards($route).'$#u';
+				$pattern = '#^'.static::wildcards($route).'$#';
 
 				// If we get a match we'll return the route and slice off the first
 				// parameter match, as preg_match sets the first array item to the

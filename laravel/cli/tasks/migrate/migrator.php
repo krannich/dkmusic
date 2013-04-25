@@ -103,23 +103,9 @@ class Migrator extends Task {
 	{
 		$migrations = $this->resolver->last();
 
-		// If bundles supplied, filter migrations to rollback only bundles'
-		// migrations.
-		if (count($arguments) > 0)
-		{
-			$bundles = $arguments;
-			
-			if ( ! is_array($bundles)) $bundles = array($bundles);
-			
-			$migrations = array_filter($migrations, function($migration) use ($bundles)
-			{
-				return in_array($migration['bundle'], $bundles);
-			});
-		}
-
 		if (count($migrations) == 0)
 		{
-			echo "Nothing to rollback.".PHP_EOL;
+			echo "Nothing to rollback.";
 
 			return false;
 		}
@@ -150,7 +136,7 @@ class Migrator extends Task {
 	 */
 	public function reset($arguments = array())
 	{
-		while ($this->rollback($arguments)) {};
+		while ($this->rollback()) {};
 	}
 
 	/**

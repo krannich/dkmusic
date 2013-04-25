@@ -10,13 +10,6 @@ class HTML {
 	public static $macros = array();
 
 	/**
-	 * Cache application encoding locally to save expensive calls to config::get().
-	 *
-	 * @var string
-	 */
-	public static $encoding = null;
-
-	/**
 	 * Registers a custom macro.
 	 *
 	 * @param  string   $name
@@ -38,7 +31,7 @@ class HTML {
 	 */
 	public static function entities($value)
 	{
-		return htmlentities($value, ENT_QUOTES, static::encoding(), false);
+		return htmlentities($value, ENT_QUOTES, Config::get('application.encoding'), false);
 	}
 
 	/**
@@ -49,7 +42,7 @@ class HTML {
 	 */
 	public static function decode($value)
 	{
-		return html_entity_decode($value, ENT_QUOTES, static::encoding());
+		return html_entity_decode($value, ENT_QUOTES, Config::get('application.encoding'));
 	}
 
 	/**
@@ -62,7 +55,7 @@ class HTML {
 	 */
 	public static function specialchars($value)
 	{
-		return htmlspecialchars($value, ENT_QUOTES, static::encoding(), false);
+		return htmlspecialchars($value, ENT_QUOTES, Config::get('application.encoding'), false);
 	}
 
 	/**
@@ -248,19 +241,6 @@ class HTML {
 	}
 
 	/**
-	 * Generate an HTML link to a different language
-	 *
-	 * @param  string  $language
-	 * @param  string  $title
-	 * @param  array   $attributes
-	 * @return string
-	 */
-	public static function link_to_language($language, $title = null, $attributes = array())
-	{
-		return static::link(URL::to_language($language), $title, $attributes);
-	}
-
-	/**
 	 * Generate an HTML mailto link.
 	 *
 	 * The E-Mail address will be obfuscated to protect it from spam bots.
@@ -369,7 +349,7 @@ class HTML {
 
 		return '<'.$type.static::attributes($attributes).'>'.$html.'</'.$type.'>';
 	}
-
+	
 	/**
 	 * Generate a definition list.
 	 *
@@ -382,13 +362,13 @@ class HTML {
 		$html = '';
 
 		if (count($list) == 0) return $html;
-
+		
 		foreach ($list as $term => $description)
 		{
 			$html .= '<dt>'.static::entities($term).'</dt>';
 			$html .= '<dd>'.static::entities($description).'</dd>';
 		}
-
+		
 		return '<dl'.static::attributes($attributes).'>'.$html.'</dl>';
 	}
 
@@ -449,16 +429,6 @@ class HTML {
 		}
 
 		return $safe;
-	}
-
-	/**
-	 * Get the appliction.encoding without needing to request it from Config::get() each time.
-	 *
-	 * @return string
-	 */
-	protected static function encoding()
-	{
-		return static::$encoding ?: static::$encoding = Config::get('application.encoding');
 	}
 
 	/**

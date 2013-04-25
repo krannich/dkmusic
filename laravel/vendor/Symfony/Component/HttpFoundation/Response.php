@@ -61,7 +61,7 @@ class Response
      *
      * @var array
      */
-    public static $statusTexts = array(
+    static public $statusTexts = array(
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',            // RFC2518
@@ -83,7 +83,6 @@ class Response
         305 => 'Use Proxy',
         306 => 'Reserved',
         307 => 'Temporary Redirect',
-        308 => 'Permanent Redirect',    // RFC-reschke-http-status-308-07
         400 => 'Bad Request',
         401 => 'Unauthorized',
         402 => 'Payment Required',
@@ -102,26 +101,26 @@ class Response
         415 => 'Unsupported Media Type',
         416 => 'Requested Range Not Satisfiable',
         417 => 'Expectation Failed',
-        418 => 'I\'m a teapot',                                               // RFC2324
-        422 => 'Unprocessable Entity',                                        // RFC4918
-        423 => 'Locked',                                                      // RFC4918
-        424 => 'Failed Dependency',                                           // RFC4918
+        418 => 'I\'m a teapot',
+        422 => 'Unprocessable Entity',  // RFC4918
+        423 => 'Locked',                // RFC4918
+        424 => 'Failed Dependency',     // RFC4918
         425 => 'Reserved for WebDAV advanced collections expired proposal',   // RFC2817
-        426 => 'Upgrade Required',                                            // RFC2817
-        428 => 'Precondition Required',                                       // RFC6585
-        429 => 'Too Many Requests',                                           // RFC6585
-        431 => 'Request Header Fields Too Large',                             // RFC6585
+        426 => 'Upgrade Required',      // RFC2817
+        428 => 'Precondition Required', // RFC-nottingham-http-new-status-04
+        429 => 'Too Many Requests',     // RFC-nottingham-http-new-status-04
+        431 => 'Request Header Fields Too Large',   // RFC-nottingham-http-new-status-04
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
         502 => 'Bad Gateway',
         503 => 'Service Unavailable',
         504 => 'Gateway Timeout',
         505 => 'HTTP Version Not Supported',
-        506 => 'Variant Also Negotiates (Experimental)',                      // RFC2295
-        507 => 'Insufficient Storage',                                        // RFC4918
-        508 => 'Loop Detected',                                               // RFC5842
-        510 => 'Not Extended',                                                // RFC2774
-        511 => 'Network Authentication Required',                             // RFC6585
+        506 => 'Variant Also Negotiates (Experimental)', // [RFC2295]
+        507 => 'Insufficient Storage',  // RFC4918
+        508 => 'Loop Detected',         // RFC5842
+        510 => 'Not Extended',          // RFC2774
+        511 => 'Network Authentication Required',   // RFC-nottingham-http-new-status-04
     );
 
     /**
@@ -158,7 +157,7 @@ class Response
      *
      * @return Response
      */
-    public static function create($content = '', $status = 200, $headers = array())
+    static public function create($content = '', $status = 200, $headers = array())
     {
         return new static($content, $status, $headers);
     }
@@ -166,7 +165,7 @@ class Response
     /**
      * Returns the Response as an HTTP string.
      *
-     * The string representation of the Response is the same as the
+     * The string representation of the Resonse is the same as the
      * one that will be sent to the client only if the prepare() method
      * has been called before.
      *
@@ -198,15 +197,13 @@ class Response
      * the Request that is "associated" with this Response.
      *
      * @param Request $request A Request instance
-     *
-     * @return Response The current response.
      */
     public function prepare(Request $request)
     {
         $headers = $this->headers;
 
         if ($this->isInformational() || in_array($this->statusCode, array(204, 304))) {
-            $this->setContent(null);
+            $this->setContent('');
         }
 
         // Content-type based on the Request
@@ -234,24 +231,11 @@ class Response
         if ('HEAD' === $request->getMethod()) {
             // cf. RFC2616 14.13
             $length = $headers->get('Content-Length');
-            $this->setContent(null);
+            $this->setContent('');
             if ($length) {
                 $headers->set('Content-Length', $length);
             }
         }
-
-        // Fix protocol
-        if ('HTTP/1.0' != $request->server->get('SERVER_PROTOCOL')) {
-            $this->setProtocolVersion('1.1');
-        }
-
-        // Check if we need to send extra expire info headers
-        if ('1.0' == $this->getProtocolVersion() && 'no-cache' == $this->headers->get('Cache-Control')) {
-            $this->headers->set('pragma', 'no-cache');
-            $this->headers->set('expires', -1);
-        }
-
-        return $this;
     }
 
     /**
@@ -310,18 +294,6 @@ class Response
 
         if (function_exists('fastcgi_finish_request')) {
             fastcgi_finish_request();
-        } elseif ('cli' !== PHP_SAPI) {
-            // ob_get_level() never returns 0 on some Windows configurations, so if
-            // the level is the same two times in a row, the loop should be stopped.
-            $previous = null;
-            $obStatus = ob_get_status(1);
-            while (($level = ob_get_level()) > 0 && $level !== $previous) {
-                $previous = $level;
-                if ($obStatus[$level - 1] && isset($obStatus[$level - 1]['del']) && $obStatus[$level - 1]['del']) {
-                    ob_end_flush();
-                }
-            }
-            flush();
         }
 
         return $this;
@@ -393,10 +365,7 @@ class Response
      * Sets the response status code.
      *
      * @param integer $code HTTP status code
-     * @param mixed   $text HTTP status text
-     *
-     * If the status text is null it will be automatically populated for the known
-     * status codes and left empty otherwise.
+     * @param string  $text HTTP status text
      *
      * @return Response
      *
@@ -406,24 +375,12 @@ class Response
      */
     public function setStatusCode($code, $text = null)
     {
-        $this->statusCode = $code = (int) $code;
+        $this->statusCode = (int) $code;
         if ($this->isInvalid()) {
             throw new \InvalidArgumentException(sprintf('The HTTP status code "%s" is not valid.', $code));
         }
 
-        if (null === $text) {
-            $this->statusText = isset(self::$statusTexts[$code]) ? self::$statusTexts[$code] : '';
-
-            return $this;
-        }
-
-        if (false === $text) {
-            $this->statusText = '';
-
-            return $this;
-        }
-
-        $this->statusText = $text;
+        $this->statusText = false === $text ? '' : (null === $text ? self::$statusTexts[$this->statusCode] : $text);
 
         return $this;
     }
@@ -571,7 +528,7 @@ class Response
      */
     public function mustRevalidate()
     {
-        return $this->headers->hasCacheControlDirective('must-revalidate') || $this->headers->has('proxy-revalidate');
+        return $this->headers->hasCacheControlDirective('must-revalidate') || $this->headers->has('must-proxy-revalidate');
     }
 
     /**
@@ -585,7 +542,7 @@ class Response
      */
     public function getDate()
     {
-        return $this->headers->getDate('Date', new \DateTime());
+        return $this->headers->getDate('Date');
     }
 
     /**
@@ -744,7 +701,7 @@ class Response
      * When the responses TTL is <= 0, the response may not be served from cache without first
      * revalidating with the origin.
      *
-     * @return integer|null The TTL in seconds
+     * @return integer The TTL in seconds
      *
      * @api
      */
@@ -1003,10 +960,6 @@ class Response
      */
     public function isNotModified(Request $request)
     {
-        if (!$request->isMethodSafe()) {
-            return false;
-        }
-
         $lastModified = $request->headers->get('If-Modified-Since');
         $notModified = false;
         if ($etags = $request->getEtags()) {
@@ -1142,7 +1095,7 @@ class Response
      */
     public function isRedirect($location = null)
     {
-        return in_array($this->statusCode, array(201, 301, 302, 303, 307, 308)) && (null === $location ?: $location == $this->headers->get('Location'));
+        return in_array($this->statusCode, array(201, 301, 302, 303, 307)) && (null === $location ?: $location == $this->headers->get('Location'));
     }
 
     /**

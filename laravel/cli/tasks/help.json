@@ -38,10 +38,6 @@
 			"description": "Install a bundle.",
 			"command": "php artisan bundle:install swiftmailer"
 		},
-		"bundle:uninstall": {
-			"description": "Uninstall a bundle, delete its public, rollback its migrations.",
-			"command": "php artisan bundle:uninstall swiftmailer"
-		},
 		"bundle:upgrade": {
 			"description": "Upgrade a bundle.",
 			"command": "php artisan bundle:upgrade swiftmailer"
@@ -49,10 +45,6 @@
 		"bundle:publish": {
 			"description": "Publish all bundles' assets.",
 			"command": "php artisan bundle:publish"
-		},
-		"bundle:unpublish": {
-			"description": "Delete all bundles' assets from the public directory.",
-			"command": "php artisan bundle:unpublish"
 		}
 	},	
 	"Unit Testing": {

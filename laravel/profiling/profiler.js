@@ -1,9 +1,4 @@
 var anbu = {
-	// Sandbox a jQuery instance for the profiler.
-	jq: jQuery.noConflict(true)
-};
-
-anbu.jq.extend(anbu, {
 
 	// BOUND ELEMENTS
 	// -------------------------------------------------------------
@@ -11,20 +6,20 @@ anbu.jq.extend(anbu, {
 	// the DOM every time they are used.
 
 	el: {
-		main: anbu.jq('.anbu'),
-		close: anbu.jq('#anbu-close'),
-		zoom: anbu.jq('#anbu-zoom'),
-		hide: anbu.jq('#anbu-hide'),
-		show: anbu.jq('#anbu-show'),
-		tab_pane: anbu.jq('.anbu-tab-pane'),
-		hidden_tab_pane: anbu.jq('.anbu-tab-pane:visible'),
-		tab: anbu.jq('.anbu-tab'),
-		tabs: anbu.jq('.anbu-tabs'),
-		tab_links: anbu.jq('.anbu-tabs a'),
-		window: anbu.jq('.anbu-window'),
-		closed_tabs: anbu.jq('#anbu-closed-tabs'),
-		open_tabs: anbu.jq('#anbu-open-tabs'),
-		content_area: anbu.jq('.anbu-content-area')
+		main: jQuery('.anbu'),
+		close: jQuery('#anbu-close'),
+		zoom: jQuery('#anbu-zoom'),
+		hide: jQuery('#anbu-hide'),
+		show: jQuery('#anbu-show'),
+		tab_pane: jQuery('.anbu-tab-pane'),
+		hidden_tab_pane: jQuery('.anbu-tab-pane:visible'),
+		tab: jQuery('.anbu-tab'),
+		tabs: jQuery('.anbu-tabs'),
+		tab_links: jQuery('.anbu-tabs a'),
+		window: jQuery('.anbu-window'),
+		closed_tabs: jQuery('#anbu-closed-tabs'),
+		open_tabs: jQuery('#anbu-open-tabs'),
+		content_area: jQuery('.anbu-content-area')
 	},
 
 	// CLASS ATTRIBUTES
@@ -35,7 +30,7 @@ anbu.jq.extend(anbu, {
 	is_zoomed: false,
 
 	// initial height of content area
-	small_height: anbu.jq('.anbu-content-area').height(),
+	small_height: jQuery('.anbu-content-area').height(),
 
 	// the name of the active tab css
 	active_tab: 'anbu-active-tab',
@@ -81,7 +76,7 @@ anbu.jq.extend(anbu, {
 			event.preventDefault();
 		});
 		anbu.el.tab.click(function(event) {
-			anbu.clicked_tab(anbu.jq(this));
+			anbu.clicked_tab(jQuery(this));
 			event.preventDefault();
 		});
 
@@ -109,8 +104,8 @@ anbu.jq.extend(anbu, {
 	open_window: function(tab) {
 
 		// can't directly assign this line, but it works
-		anbu.jq('.anbu-tab-pane:visible').fadeOut(200);
-		anbu.jq('.' + tab.attr(anbu.tab_data)).delay(220).fadeIn(300);
+		jQuery('.anbu-tab-pane:visible').fadeOut(200);
+		jQuery('.' + tab.attr(anbu.tab_data)).delay(220).fadeIn(300);
 		anbu.el.tab_links.removeClass(anbu.active_tab);
 		tab.addClass(anbu.active_tab);
 		anbu.el.window.slideDown(300);
@@ -177,13 +172,13 @@ anbu.jq.extend(anbu, {
 	// Toggle the zoomed mode of the top window.
 
 	zoom: function() {
-		var height;
+
 		if (anbu.is_zoomed) {
 			height = anbu.small_height;
 			anbu.is_zoomed = false;
 		} else {
 			// the 6px is padding on the top of the window
-			height = (anbu.jq(window).height() - anbu.el.tabs.height() - 6) + 'px';
+			height = (jQuery(window).height() - anbu.el.tabs.height() - 6) + 'px';
 			anbu.is_zoomed = true;
 		}
 
@@ -191,7 +186,9 @@ anbu.jq.extend(anbu, {
 
 	}
 
-});
+};
 
 // launch anbu on jquery dom ready
-anbu.jq(anbu.start);
+jQuery(document).ready(function() {
+	anbu.start();
+});

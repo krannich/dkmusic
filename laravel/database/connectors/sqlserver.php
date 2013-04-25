@@ -30,7 +30,7 @@ class SQLServer extends Connector {
 		$port = (isset($port)) ? ','.$port : '';
 		
 		//check for dblib for mac users connecting to mssql (utilizes freetds)
-		if (in_array('dblib',PDO::getAvailableDrivers()))
+		if (!empty($dsn_type) and $dsn_type == 'dblib')
 		{
 			$dsn = "dblib:host={$host}{$port};dbname={$database}";
 		}
